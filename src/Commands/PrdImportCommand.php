@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Commands\Concerns\SuggestsNextStep;
 use LaraForge\Documents\DocumentRegistry;
 use LaraForge\Documents\Parsers\ExternalPrdParser;
 use LaraForge\Documents\ProductRequirements;
@@ -31,12 +32,14 @@ use function Laravel\Prompts\warning;
 )]
 class PrdImportCommand extends Command
 {
+    use SuggestsNextStep;
+
     protected function configure(): void
     {
         $this
             ->addArgument('file', InputArgument::REQUIRED, 'Path to the PRD file to import')
             ->addOption('feature', 'f', InputOption::VALUE_OPTIONAL, 'Associate with a feature ID')
-            ->addOption('normalize', 'n', InputOption::VALUE_NONE, 'Normalize to structured YAML format')
+            ->addOption('normalize', null, InputOption::VALUE_NONE, 'Normalize to structured YAML format')
             ->addOption('title', 't', InputOption::VALUE_OPTIONAL, 'Override the PRD title')
             ->addOption('copy-only', null, InputOption::VALUE_NONE, 'Only copy the file without parsing (keeps original format)')
             ->addOption('create-feature', null, InputOption::VALUE_NONE, 'Create a new feature from the PRD');
@@ -186,11 +189,8 @@ class PrdImportCommand extends Command
             }
         }
 
-        // Show next steps
-        $output->writeln('');
-        $output->writeln('<comment>Next steps:</comment>');
-        $output->writeln('  1. Create FRD: <info>laraforge skill:run create-frd --params=prd_path="'.$savedPath.'"</info>');
-        $output->writeln('  2. Check status: <info>laraforge status</info>');
+        // Mark 'import-prd' step complete and suggest what's next
+        $this->completeStepAndSuggestNext('import-prd', $output);
 
         return self::SUCCESS;
     }
@@ -209,9 +209,8 @@ class PrdImportCommand extends Command
         $filesystem->copy($sourcePath, $destPath, true);
         info("PRD copied to: {$destPath}");
 
-        $output->writeln('');
-        note('The file was copied without parsing. To normalize it later, run:');
-        $output->writeln("  <info>laraforge prd:import {$destPath} --normalize</info>");
+        // Mark step complete and suggest what's next
+        $this->completeStepAndSuggestNext('import-prd', $output);
 
         return self::SUCCESS;
     }

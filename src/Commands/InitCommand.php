@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Commands\Concerns\SuggestsNextStep;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,6 +26,8 @@ use function Laravel\Prompts\warning;
 )]
 final class InitCommand extends Command
 {
+    use SuggestsNextStep;
+
     protected function configure(): void
     {
         $this
@@ -145,10 +148,8 @@ final class InitCommand extends Command
 
         outro('✅ LaraForge initialized successfully!');
 
-        info('Next steps:');
-        $output->writeln('  1. Review and customize .laraforge/config.yaml');
-        $output->writeln('  2. Run <info>laraforge generate:claude</info> to regenerate CLAUDE.md');
-        $output->writeln('  3. Add your custom templates to .laraforge/templates/');
+        // Mark 'init' step complete and suggest what's next
+        $this->completeStepAndSuggestNext('init', $output);
 
         return self::SUCCESS;
     }

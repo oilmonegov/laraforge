@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Commands\Concerns\SuggestsNextStep;
 use LaraForge\Generators\GitHooksGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,6 +25,8 @@ use function Laravel\Prompts\warning;
 )]
 final class HooksInstallCommand extends Command
 {
+    use SuggestsNextStep;
+
     protected function configure(): void
     {
         $this
@@ -99,9 +102,9 @@ final class HooksInstallCommand extends Command
         $output->writeln('');
         $output->writeln('<comment>Hooks are now active. To disable temporarily, use:</comment>');
         $output->writeln('  git commit --no-verify');
-        $output->writeln('');
-        $output->writeln('<comment>To customize hooks, edit the files in:</comment>');
-        $output->writeln("  {$directory}/");
+
+        // Mark 'install-hooks' step complete and suggest what's next
+        $this->completeStepAndSuggestNext('install-hooks', $output);
 
         return self::SUCCESS;
     }

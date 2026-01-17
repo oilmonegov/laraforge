@@ -273,13 +273,23 @@ class WorkflowGuide
     {
         return [
             new GuideStep(
+                id: 'git-init',
+                name: 'Initialize Git Repository',
+                description: 'A git repository is required for version control and safe parallel work. This is the foundation of your project.',
+                command: 'git init',
+                phase: 'setup',
+                required: true,
+                order: 1,
+            ),
+            new GuideStep(
                 id: 'init',
                 name: 'Initialize LaraForge',
                 description: 'Set up LaraForge in your project. This creates the .laraforge directory and configuration files.',
                 command: 'laraforge init',
                 phase: 'setup',
                 required: true,
-                order: 1,
+                order: 2,
+                prerequisite: 'git-init',
             ),
             new GuideStep(
                 id: 'install-hooks',
@@ -288,7 +298,7 @@ class WorkflowGuide
                 command: 'laraforge hooks:install',
                 phase: 'setup',
                 required: false,
-                order: 2,
+                order: 3,
                 prerequisite: 'init',
             ),
             new GuideStep(
@@ -298,7 +308,7 @@ class WorkflowGuide
                 command: 'laraforge next --start feature',
                 phase: 'complete',
                 required: false,
-                order: 3,
+                order: 4,
                 prerequisite: 'init',
             ),
         ];
@@ -651,6 +661,7 @@ class WorkflowGuide
     private function detectStepCompletion(GuideStep $step): bool
     {
         return match ($step->id) {
+            'git-init' => $this->isGitInitialized(),
             'init' => $this->isProjectInitialized(),
             'import-prd' => $this->hasPrdDocument(),
             'create-frd' => $this->hasFrdDocument(),
@@ -658,6 +669,11 @@ class WorkflowGuide
             'install-hooks' => $this->hasGitHooks(),
             default => false,
         };
+    }
+
+    private function isGitInitialized(): bool
+    {
+        return $this->filesystem->exists($this->workingDirectory.'/.git');
     }
 
     private function hasPrdDocument(): bool

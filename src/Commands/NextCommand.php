@@ -7,6 +7,7 @@ namespace LaraForge\Commands;
 use LaraForge\Guide\GuideStep;
 use LaraForge\Guide\WorkflowGuide;
 use LaraForge\Guide\WorkflowType;
+use LaraForge\Session\SessionManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
@@ -42,6 +44,23 @@ class NextCommand extends Command
     {
         $workingDir = $this->laraforge->workingDirectory();
         $guide = new WorkflowGuide($workingDir);
+        $sessionManager = new SessionManager($workingDir);
+
+        // Clean up stale sessions
+        $sessionManager->cleanupStaleSessions();
+
+        // Check for session conflicts (parallel agents on same branch)
+        $conflict = $sessionManager->detectConflict();
+        if ($conflict !== null) {
+            return $this->handleSessionConflict($sessionManager, $conflict, $output);
+        }
+
+        // Start/update session tracking
+        $workflowType = $guide->currentWorkflowType();
+        $sessionManager->startSession(
+            $workflowType?->value,
+            $guide->workflowName()
+        );
 
         // Handle start new workflow
         if ($workflowType = $input->getOption('start')) {
@@ -544,5 +563,103 @@ class NextCommand extends Command
             note("Next: {$next->name} ({$stepType})");
             $output->writeln('Run <info>laraforge next</info> to continue.');
         }
+    }
+
+    private function handleSessionConflict(
+        SessionManager $sessionManager,
+        \LaraForge\Session\SessionConflict $conflict,
+        OutputInterface $output
+    ): int {
+        $output->writeln('');
+        error('⚠️  Session Conflict Detected');
+        $output->writeln('');
+
+        $output->writeln("<fg=yellow>{$conflict->message}</>");
+        $output->writeln('');
+
+        $session = $conflict->conflictingSession;
+        $output->writeln('<comment>Active session:</comment>');
+        $output->writeln("  {$session->description()}");
+        $output->writeln("  <fg=gray>Last activity: {$session->lastActivity}</>");
+        $output->writeln('');
+
+        note($conflict->suggestion);
+        $output->writeln('');
+
+        // Offer solutions
+        $options = [
+            'worktree' => 'Create a worktree (work in parallel safely)',
+            'branch' => 'Switch to a different branch',
+            'continue' => 'Continue anyway (not recommended)',
+            'exit' => 'Exit and let the other session finish',
+        ];
+
+        $action = select(
+            label: 'How would you like to proceed?',
+            options: $options,
+            default: 'worktree',
+        );
+
+        return match ($action) {
+            'worktree' => $this->createWorktreeForConflict($sessionManager, $output),
+            'branch' => $this->switchBranchForConflict($output),
+            'continue' => self::SUCCESS,
+            'exit' => self::FAILURE,
+            default => self::FAILURE,
+        };
+    }
+
+    private function createWorktreeForConflict(SessionManager $sessionManager, OutputInterface $output): int
+    {
+        $name = text(
+            label: 'Worktree name',
+            placeholder: 'my-parallel-work',
+            default: $sessionManager->suggestWorktreeName(),
+            required: true,
+        );
+
+        $worktreePath = $sessionManager->createWorktree($name);
+
+        if ($worktreePath === null) {
+            error('Failed to create worktree');
+
+            return self::FAILURE;
+        }
+
+        info("Worktree created: {$worktreePath}");
+        $output->writeln('');
+        note('To work in the new worktree, run:');
+        $output->writeln("  <info>cd {$worktreePath}</info>");
+        $output->writeln('  <info>laraforge next</info>');
+
+        return self::SUCCESS;
+    }
+
+    private function switchBranchForConflict(OutputInterface $output): int
+    {
+        $branchName = text(
+            label: 'New branch name',
+            placeholder: 'feature/my-work',
+            required: true,
+        );
+
+        $process = Process::fromShellCommandline(
+            'git checkout -b '.escapeshellarg($branchName),
+            $this->laraforge->workingDirectory()
+        );
+
+        $exitCode = $process->run();
+
+        if ($exitCode === 0) {
+            info("Switched to new branch: {$branchName}");
+            $output->writeln('Run <info>laraforge next</info> to continue.');
+
+            return self::SUCCESS;
+        }
+
+        error('Failed to create branch');
+        $output->writeln($process->getErrorOutput());
+
+        return self::FAILURE;
     }
 }

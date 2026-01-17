@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Commands\Concerns\SuggestsNextStep;
+use LaraForge\Guide\WorkflowGuide;
+use LaraForge\Guide\WorkflowType;
 use LaraForge\Project\Feature;
 use LaraForge\Project\ProjectState;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,6 +26,8 @@ use function Laravel\Prompts\text;
 )]
 class FeatureStartCommand extends Command
 {
+    use SuggestsNextStep;
+
     protected function configure(): void
     {
         $this
@@ -88,12 +93,12 @@ class FeatureStartCommand extends Command
         info("Created feature: {$feature->title()}");
         note("Feature ID: {$feature->id()}");
 
-        // Suggest next steps
-        $output->writeln('');
-        $output->writeln('<comment>Next steps:</comment>');
-        $output->writeln('  1. Create PRD: <info>laraforge skill:run create-prd --title="'.$title.'"</info>');
-        $output->writeln('  2. Create FRD: <info>laraforge skill:run create-frd --title="'.$title.'"</info>');
-        $output->writeln('  3. Check status: <info>laraforge status</info>');
+        // Start the feature workflow in the guide
+        $guide = new WorkflowGuide($workingDir);
+        $guide->startWorkflow(WorkflowType::FEATURE, $title);
+
+        // Suggest what's next
+        $this->showNextStepSuggestion($guide, $output);
 
         return self::SUCCESS;
     }
