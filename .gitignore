@@ -1,0 +1,44 @@
+# Dependencies
+/vendor
+/node_modules/
+composer.phar
+
+# Cache and build artifacts
+/.phpunit.cache/
+/.phpstan.cache/
+/coverage/
+/.php-cs-fixer.cache
+/build/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+.phpunit.result.cache
+phpunit.xml
+
+# Local configuration
+.laraforge.local.yaml

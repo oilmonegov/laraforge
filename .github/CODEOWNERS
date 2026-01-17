@@ -1,0 +1,23 @@
+# Default owners for everything in the repo
+* @oilmonegov
+
+# Core application
+/src/ @oilmonegov
+
+# Commands
+/src/Commands/ @oilmonegov
+
+# Configuration
+/src/Config/ @oilmonegov
+
+# Templates
+/src/Templates/ @oilmonegov
+
+# Tests
+/tests/ @oilmonegov
+
+# CI/CD and GitHub configuration
+/.github/ @oilmonegov
+
+# Documentation
+*.md @oilmonegov

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# LaraForge Pre-commit Hook
+# Runs code quality checks before allowing commits
+
+set -e
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.php$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "No PHP files staged for commit."
+    exit 0
+fi
+
+echo "Running pre-commit checks..."
+
+# Check if vendor directory exists
+if [ ! -d "vendor" ]; then
+    echo "Error: vendor directory not found. Run 'composer install' first."
+    exit 1
+fi
+
+# Run Laravel Pint on staged files
+echo "Checking code style with Pint..."
+./vendor/bin/pint --test $STAGED_FILES
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "Code style issues found. Run './vendor/bin/pint' to fix them."
+    exit 1
+fi
+
+# Run PHPStan
+echo "Running static analysis with PHPStan..."
+./vendor/bin/phpstan analyse --no-progress $STAGED_FILES
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "Static analysis errors found. Please fix them before committing."
+    exit 1
+fi
+
+echo "All pre-commit checks passed!"
+exit 0
