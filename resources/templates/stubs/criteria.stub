@@ -1,0 +1,7 @@
+feature: "{{ feature }}"
+criteria:
+  - id: "AC-001"
+    description: "{{ description }}"
+    assertions:
+      - "expected behavior occurs"
+      - "system state is valid"

@@ -10,3 +10,5 @@ parameters:
     ignoreErrors:
         # Dynamic class instantiation with custom constructors
         - '#Parameter \#1 \$name of class Symfony\\Component\\Console\\Command\\Command constructor expects string\|null#'
+        # Trait intended for use by generators from adapters/plugins
+        - '#Trait LaraForge\\Support\\TddAwareGenerator is used zero times#'

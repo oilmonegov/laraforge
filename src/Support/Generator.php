@@ -24,6 +24,11 @@ abstract class Generator implements GeneratorInterface
         return [];
     }
 
+    public function supportsTdd(): bool
+    {
+        return false;
+    }
+
     public function validate(array $options): void
     {
         $errors = [];

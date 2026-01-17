@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+describe('{{ feature }}', function () {
+{{#each testCases}}
+    /**
+     * Acceptance Criteria: {{ id }}
+     * {{ label }}
+     */
+    it('{{ label }}', function () {
+{{#each assertions}}
+        // Assert: {{ this }}
+{{/each}}
+
+        $this->markTestIncomplete('Implement this test');
+    });
+
+{{/each}}
+{{#if emptyPlaceholder}}
+    it('should pass basic test', function () {
+        expect(true)->toBeTrue();
+    });
+{{/if}}
+});

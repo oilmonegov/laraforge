@@ -7,10 +7,12 @@ namespace LaraForge;
 use LaraForge\Config\ConfigLoader;
 use LaraForge\Contracts\AdapterInterface;
 use LaraForge\Contracts\ConfigLoaderInterface;
+use LaraForge\Contracts\CriteriaLoaderInterface;
 use LaraForge\Contracts\GeneratorInterface;
 use LaraForge\Contracts\LaraForgeInterface;
 use LaraForge\Contracts\PluginInterface;
 use LaraForge\Contracts\TemplateEngineInterface;
+use LaraForge\Criteria\CriteriaLoader;
 use LaraForge\Generators\GitHooksGenerator;
 use LaraForge\Templates\TemplateEngine;
 
@@ -23,6 +25,8 @@ final class LaraForge implements LaraForgeInterface
     private ConfigLoaderInterface $config;
 
     private TemplateEngineInterface $templates;
+
+    private CriteriaLoaderInterface $criteriaLoader;
 
     /** @var array<string, AdapterInterface> */
     private array $adapters = [];
@@ -42,6 +46,7 @@ final class LaraForge implements LaraForgeInterface
         $this->workingDirectory = $workingDirectory ?? getcwd() ?: '.';
         $this->config = new ConfigLoader;
         $this->templates = new TemplateEngine;
+        $this->criteriaLoader = new CriteriaLoader($this);
 
         $this->initialize();
     }
@@ -116,6 +121,11 @@ final class LaraForge implements LaraForgeInterface
     public function templates(): TemplateEngineInterface
     {
         return $this->templates;
+    }
+
+    public function criteriaLoader(): CriteriaLoaderInterface
+    {
+        return $this->criteriaLoader;
     }
 
     public function registerAdapter(AdapterInterface $adapter): void

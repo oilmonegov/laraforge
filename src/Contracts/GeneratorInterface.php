@@ -49,4 +49,9 @@ interface GeneratorInterface
      * @throws \LaraForge\Exceptions\ValidationException
      */
     public function validate(array $options): void;
+
+    /**
+     * Check if this generator supports TDD mode.
+     */
+    public function supportsTdd(): bool;
 }

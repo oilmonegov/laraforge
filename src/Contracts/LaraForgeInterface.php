@@ -35,6 +35,11 @@ interface LaraForgeInterface
     public function templates(): TemplateEngineInterface;
 
     /**
+     * Get the criteria loader.
+     */
+    public function criteriaLoader(): CriteriaLoaderInterface;
+
+    /**
      * Register an adapter.
      */
     public function registerAdapter(AdapterInterface $adapter): void;

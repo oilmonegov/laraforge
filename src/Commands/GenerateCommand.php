@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Enums\ImplementationStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,7 +27,9 @@ final class GenerateCommand extends Command
     {
         $this
             ->addArgument('generator', InputArgument::OPTIONAL, 'The generator to use')
-            ->addOption('option', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Generator options (key=value)');
+            ->addOption('option', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Generator options (key=value)')
+            ->addOption('style', 's', InputOption::VALUE_REQUIRED, 'Implementation style (regular, tdd)')
+            ->addOption('criteria', 'c', InputOption::VALUE_REQUIRED, 'Path to acceptance criteria file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -65,6 +68,35 @@ final class GenerateCommand extends Command
 
         // Parse options
         $options = $this->parseOptions($input->getOption('option'));
+
+        // Handle implementation style
+        $styleOption = $input->getOption('style');
+        if ($styleOption !== null) {
+            $options['style'] = $styleOption;
+        } elseif ($generator->supportsTdd()) {
+            // Prompt for style if generator supports TDD
+            $defaultStyle = (string) $this->laraforge->config()->get('implementation.style', 'regular');
+            $styleChoice = select(
+                label: 'Which implementation style do you want to use?',
+                options: [
+                    ImplementationStyle::Regular->value => ImplementationStyle::Regular->label().' - '.ImplementationStyle::Regular->description(),
+                    ImplementationStyle::TDD->value => ImplementationStyle::TDD->label().' - '.ImplementationStyle::TDD->description(),
+                ],
+                default: $defaultStyle,
+            );
+            $options['style'] = $styleChoice;
+        }
+
+        // Handle criteria file
+        $criteriaPath = $input->getOption('criteria');
+        if ($criteriaPath !== null) {
+            if (! file_exists($criteriaPath)) {
+                error("Criteria file not found: {$criteriaPath}");
+
+                return self::FAILURE;
+            }
+            $options['criteria'] = $criteriaPath;
+        }
 
         // Prompt for required options that weren't provided
         foreach ($generator->options() as $optionName => $optionConfig) {

@@ -17,6 +17,17 @@ overrides:
 generators:
   enabled: true
 
+# Implementation Style Configuration
+implementation:
+  style: "regular"  # Options: regular, tdd
+  tdd:
+    test_framework: "pest"
+    require_criteria: false
+
+# Acceptance Criteria Configuration
+criteria:
+  directory: ".laraforge/criteria"
+
 # Git Hooks Configuration
 hooks:
   directory: ".githooks"

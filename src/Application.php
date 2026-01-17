@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaraForge;
 
+use LaraForge\Commands\CriteriaInitCommand;
+use LaraForge\Commands\CriteriaValidateCommand;
 use LaraForge\Commands\GenerateCommand;
 use LaraForge\Commands\HooksInstallCommand;
 use LaraForge\Commands\InitCommand;
@@ -38,6 +40,8 @@ final class Application extends ConsoleApplication
         $this->add(new ListGeneratorsCommand($this->laraforge));
         $this->add(new VersionCommand($this->laraforge));
         $this->add(new HooksInstallCommand($this->laraforge));
+        $this->add(new CriteriaInitCommand($this->laraforge));
+        $this->add(new CriteriaValidateCommand($this->laraforge));
 
         // Register adapter commands
         foreach ($this->laraforge->adapters() as $adapter) {
