@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * LaraForge CLI
+ * 
+ * AI-first project scaffolding framework.
+ */
+
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require __DIR__ . '/../vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/../../../autoload.php')) {
+    require __DIR__ . '/../../../autoload.php';
+} else {
+    fwrite(STDERR, "Could not find autoloader. Run 'composer install'.\n");
+    exit(1);
+}
+
+use LaraForge\Application;
+
+$app = new Application();
+$status = $app->run();
+
+exit($status);

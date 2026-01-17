@@ -1,0 +1,39 @@
+# {{ projectName }}
+
+{{ projectDescription }}
+
+---
+
+## Project Overview
+
+This project uses LaraForge for AI-assisted development.
+
+{{#if hasSkills}}
+## Skills
+
+Skills are located in `.laraforge/templates/skills/` and define best practices and patterns for this project.
+{{/if}}
+
+{{#if hasCommands}}
+## Commands
+
+Custom slash commands are defined in `.laraforge/templates/commands/`.
+{{/if}}
+
+{{#if hasAgents}}
+## Agents
+
+Sub-agents for specialized tasks are defined in `.laraforge/templates/agents/`.
+{{/if}}
+
+---
+
+## Configuration
+
+Project configuration is in `.laraforge/config.yaml`.
+
+To regenerate this file, run:
+
+```bash
+laraforge generate:claude
+```

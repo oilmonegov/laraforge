@@ -1,0 +1,18 @@
+# LaraForge Core Configuration
+# This is the default configuration merged with project-specific config
+
+laraforge:
+  version: "1.0.0"
+
+defaults:
+  php_version: "8.4"
+  strict_types: true
+  
+templates:
+  engine: "simple"  # simple, blade, twig
+  
+overrides:
+  directory: ".laraforge"
+  
+generators:
+  enabled: true
