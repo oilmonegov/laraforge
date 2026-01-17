@@ -40,8 +40,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Run tests
-        run: ./vendor/bin/pest --colors=always
+      - name: Run tests with coverage
+        run: ./vendor/bin/pest --colors=always --coverage --min=80
 
   code-style:
     name: Code Style
