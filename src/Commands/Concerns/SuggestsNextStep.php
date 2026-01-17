@@ -213,7 +213,7 @@ trait SuggestsNextStep
 
             case 'exit':
                 $output->writeln('');
-                $output->writeln('<fg=gray>Run `laraforge next` when you\'re ready to continue.</>');
+                $output->writeln('<fg=gray>Run `./vendor/bin/laraforge next` when you\'re ready to continue.</>');
                 break;
 
             default:
@@ -248,7 +248,7 @@ trait SuggestsNextStep
         $output->writeln('');
 
         // Check if it's a laraforge command
-        if (str_starts_with($command, 'laraforge ')) {
+        if (str_starts_with($command, './vendor/bin/laraforge ') || str_starts_with($command, 'laraforge ')) {
             // For laraforge commands, mark step complete and let the command handle the next suggestion
             $guide->markCompleted($step->id);
 

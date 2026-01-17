@@ -180,7 +180,7 @@ class NextCommand extends Command
             $sessionManager->endSession();
             info("Workflow '{$name}' completed!");
             $output->writeln('');
-            note('Run `laraforge next` to start a new workflow.');
+            note('Run `./vendor/bin/laraforge next` to start a new workflow.');
         }
 
         return self::SUCCESS;

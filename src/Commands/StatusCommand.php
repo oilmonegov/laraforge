@@ -35,7 +35,7 @@ class StatusCommand extends Command
         $state = ProjectState::load($workingDir);
 
         if (! $state) {
-            warning('No LaraForge project found. Run `laraforge init` or `laraforge feature:start` first.');
+            warning('No LaraForge project found. Run `./vendor/bin/laraforge init` or `./vendor/bin/laraforge feature:start` first.');
 
             return self::FAILURE;
         }

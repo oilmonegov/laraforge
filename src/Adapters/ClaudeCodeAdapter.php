@@ -103,9 +103,9 @@ class ClaudeCodeAdapter implements AgentAdapterInterface
         return [
             'skill_usage' => <<<'INSTRUCTION'
 When working on LaraForge projects:
-1. Use `laraforge skill:run <skill>` to execute skills
-2. Check `laraforge status` for project state
-3. Use `laraforge plan` for recommendations
+1. Use `./vendor/bin/laraforge skill:run <skill>` to execute skills
+2. Check `./vendor/bin/laraforge status` for project state
+3. Use `./vendor/bin/laraforge plan` for recommendations
 4. Follow the workflow: PRD → FRD → Design → Implement → Test
 INSTRUCTION,
 
@@ -120,9 +120,9 @@ INSTRUCTION,
 
             'parallel_work' => <<<'INSTRUCTION'
 For parallel work with multiple agents:
-1. Use `laraforge worktree create` to create isolated workspaces
+1. Use `./vendor/bin/laraforge worktree create` to create isolated workspaces
 2. Each agent works in their own worktree
-3. Merge with `laraforge worktree merge` when complete
+3. Merge with `./vendor/bin/laraforge worktree merge` when complete
 4. Resolve conflicts collaboratively
 INSTRUCTION,
 

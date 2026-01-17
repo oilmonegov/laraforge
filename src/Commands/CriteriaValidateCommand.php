@@ -39,7 +39,7 @@ final class CriteriaValidateCommand extends Command
 
         if ($criteriaPath === null) {
             error("Criteria file not found for feature: {$feature}");
-            info('Run `laraforge criteria:init '.$feature.'` to create one.');
+            info('Run `./vendor/bin/laraforge criteria:init '.$feature.'` to create one.');
 
             return self::FAILURE;
         }
