@@ -1,0 +1,25 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.4]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Run tests
+        run: ./vendor/bin/pest --coverage
