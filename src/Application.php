@@ -10,6 +10,8 @@ use LaraForge\Commands\GenerateCommand;
 use LaraForge\Commands\HooksInstallCommand;
 use LaraForge\Commands\InitCommand;
 use LaraForge\Commands\ListGeneratorsCommand;
+use LaraForge\Commands\NextCommand;
+use LaraForge\Commands\PrdImportCommand;
 use LaraForge\Commands\VersionCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +44,8 @@ final class Application extends ConsoleApplication
         $this->add(new HooksInstallCommand($this->laraforge));
         $this->add(new CriteriaInitCommand($this->laraforge));
         $this->add(new CriteriaValidateCommand($this->laraforge));
+        $this->add(new PrdImportCommand($this->laraforge));
+        $this->add(new NextCommand($this->laraforge));
 
         // Register adapter commands
         foreach ($this->laraforge->adapters() as $adapter) {
