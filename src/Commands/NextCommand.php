@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\Commands\Concerns\SuggestsNextStep;
 use LaraForge\Guide\GuideStep;
 use LaraForge\Guide\WorkflowGuide;
 use LaraForge\Guide\WorkflowType;
+use LaraForge\Session\SessionConflict;
 use LaraForge\Session\SessionManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
-use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
@@ -28,6 +28,8 @@ use function Laravel\Prompts\warning;
 )]
 class NextCommand extends Command
 {
+    use SuggestsNextStep;
+
     protected function configure(): void
     {
         $this
@@ -36,8 +38,7 @@ class NextCommand extends Command
             ->addOption('status', null, InputOption::VALUE_NONE, 'Show current progress status')
             ->addOption('start', null, InputOption::VALUE_REQUIRED, 'Start a new workflow (feature, bugfix, refactor, hotfix)')
             ->addOption('end', null, InputOption::VALUE_NONE, 'End the current workflow')
-            ->addOption('history', null, InputOption::VALUE_NONE, 'Show workflow history')
-            ->addOption('auto', 'a', InputOption::VALUE_NONE, 'Automatically run the next command without confirmation');
+            ->addOption('history', null, InputOption::VALUE_NONE, 'Show workflow history');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -63,13 +64,13 @@ class NextCommand extends Command
         );
 
         // Handle start new workflow
-        if ($workflowType = $input->getOption('start')) {
-            return $this->startNewWorkflow($guide, $workflowType, $output);
+        if ($startType = $input->getOption('start')) {
+            return $this->startNewWorkflow($guide, $startType, $output, $workingDir);
         }
 
         // Handle end workflow
         if ($input->getOption('end')) {
-            return $this->endWorkflow($guide, $output);
+            return $this->endWorkflow($guide, $sessionManager, $output);
         }
 
         // Handle history
@@ -77,41 +78,45 @@ class NextCommand extends Command
             return $this->showHistory($guide, $output);
         }
 
-        // Handle status
+        // Handle status (non-interactive)
         if ($input->getOption('status')) {
-            return $this->showStatus($guide, $output);
+            $this->showFullStatus($guide, $output);
+
+            return self::SUCCESS;
         }
 
-        // Handle list
+        // Handle list (non-interactive)
         if ($input->getOption('list')) {
             return $this->listRemainingSteps($guide, $output);
+        }
+
+        // Handle skip
+        if ($input->getOption('skip')) {
+            $currentStep = $guide->currentStep();
+            if ($currentStep) {
+                return $this->skipStepDirectly($guide, $currentStep, $output, $workingDir);
+            }
         }
 
         // Check if we have an active workflow
         $workflowType = $guide->currentWorkflowType();
 
         if ($workflowType === null) {
-            return $this->promptToStartWorkflow($guide, $output);
+            return $this->promptToStartWorkflow($guide, $output, $workingDir);
         }
 
-        // Get current step
-        $currentStep = $guide->currentStep();
+        // Use the interactive suggestion system
+        $this->promptNextAction($guide, $output, $workingDir);
 
-        if ($currentStep === null) {
-            return $this->handleWorkflowComplete($guide, $output);
-        }
-
-        // Handle skip
-        if ($input->getOption('skip')) {
-            return $this->skipStep($guide, $currentStep, $output);
-        }
-
-        // Show current step and prompt for action
-        return $this->handleCurrentStep($guide, $currentStep, $input, $output);
+        return self::SUCCESS;
     }
 
-    private function startNewWorkflow(WorkflowGuide $guide, string $typeString, OutputInterface $output): int
-    {
+    private function startNewWorkflow(
+        WorkflowGuide $guide,
+        string $typeString,
+        OutputInterface $output,
+        string $workingDir,
+    ): int {
         $type = WorkflowType::tryFrom($typeString);
 
         if ($type === null) {
@@ -137,20 +142,18 @@ class NextCommand extends Command
         $guide->startWorkflow($type, $name);
 
         info("{$type->icon()} Started: {$name}");
-        $output->writeln('');
 
-        // Show first step
-        $firstStep = $guide->currentStep();
-        if ($firstStep) {
-            note("First step: {$firstStep->name}");
-            $output->writeln('Run <info>laraforge next</info> to continue.');
-        }
+        // Use interactive suggestion for first step
+        $this->promptNextAction($guide, $output, $workingDir);
 
         return self::SUCCESS;
     }
 
-    private function endWorkflow(WorkflowGuide $guide, OutputInterface $output): int
-    {
+    private function endWorkflow(
+        WorkflowGuide $guide,
+        SessionManager $sessionManager,
+        OutputInterface $output,
+    ): int {
         $type = $guide->currentWorkflowType();
 
         if ($type === null) {
@@ -161,8 +164,20 @@ class NextCommand extends Command
 
         $name = $guide->workflowName() ?? $type->label();
 
-        if (confirm("End workflow '{$name}'?", true)) {
+        $options = [
+            'end' => "End workflow \"{$name}\"",
+            'cancel' => 'Cancel',
+        ];
+
+        $action = select(
+            label: "End the current {$type->label()} workflow?",
+            options: $options,
+            default: 'end',
+        );
+
+        if ($action === 'end') {
             $guide->endWorkflow();
+            $sessionManager->endSession();
             info("Workflow '{$name}' completed!");
             $output->writeln('');
             note('Run `laraforge next` to start a new workflow.');
@@ -171,8 +186,11 @@ class NextCommand extends Command
         return self::SUCCESS;
     }
 
-    private function promptToStartWorkflow(WorkflowGuide $guide, OutputInterface $output): int
-    {
+    private function promptToStartWorkflow(
+        WorkflowGuide $guide,
+        OutputInterface $output,
+        string $workingDir,
+    ): int {
         $output->writeln('');
 
         if (! $guide->isProjectInitialized()) {
@@ -183,10 +201,8 @@ class NextCommand extends Command
 
             $guide->startWorkflow(WorkflowType::ONBOARDING, 'Project Setup');
 
-            $firstStep = $guide->currentStep();
-            if ($firstStep) {
-                return $this->handleCurrentStep($guide, $firstStep, new \Symfony\Component\Console\Input\ArrayInput([]), $output);
-            }
+            // Use interactive suggestion
+            $this->promptNextAction($guide, $output, $workingDir);
 
             return self::SUCCESS;
         }
@@ -199,95 +215,18 @@ class NextCommand extends Command
         foreach (WorkflowType::forExistingProject() as $type) {
             $options[$type->value] = "{$type->icon()} {$type->label()} - {$type->description()}";
         }
+        $options['exit'] = 'Exit';
 
         $choice = select(
             label: 'Select workflow type',
             options: $options,
         );
 
-        return $this->startNewWorkflow($guide, $choice, $output);
-    }
-
-    private function handleWorkflowComplete(WorkflowGuide $guide, OutputInterface $output): int
-    {
-        $type = $guide->currentWorkflowType();
-        $name = $guide->workflowName() ?? $type?->label() ?? 'Workflow';
-
-        $output->writeln('');
-        $output->writeln('<fg=green>');
-        $output->writeln('  ╔═══════════════════════════════════════════╗');
-        $output->writeln('  ║                                           ║');
-        $output->writeln('  ║   All steps completed!                    ║');
-        $output->writeln('  ║                                           ║');
-        $output->writeln('  ╚═══════════════════════════════════════════╝');
-        $output->writeln('</>');
-        $output->writeln('');
-
-        info("'{$name}' is complete!");
-
-        if (confirm('Start a new workflow?', true)) {
-            $guide->endWorkflow();
-
-            return $this->promptToStartWorkflow($guide, $output);
-        }
-
-        $guide->endWorkflow();
-
-        return self::SUCCESS;
-    }
-
-    private function showStatus(WorkflowGuide $guide, OutputInterface $output): int
-    {
-        $type = $guide->currentWorkflowType();
-        $name = $guide->workflowName();
-        $progress = $guide->progressPercentage();
-        $completed = $guide->completedSteps();
-        $remaining = $guide->remainingSteps();
-
-        $output->writeln('');
-
-        if ($type === null) {
-            note('No active workflow.');
-            $output->writeln('Run <info>laraforge next</info> to start one.');
-
+        if ($choice === 'exit') {
             return self::SUCCESS;
         }
 
-        $output->writeln("<comment>{$type->icon()} {$type->label()}</comment>");
-        if ($name) {
-            $output->writeln("<info>{$name}</info>");
-        }
-        $output->writeln(str_repeat('─', 50));
-
-        // Progress bar
-        $barWidth = 40;
-        $filledWidth = (int) round($barWidth * ($progress / 100));
-        $emptyWidth = $barWidth - $filledWidth;
-        $progressBar = str_repeat('█', $filledWidth).str_repeat('░', $emptyWidth);
-        $output->writeln("Progress: [{$progressBar}] {$progress}%");
-        $output->writeln('');
-
-        // Completed steps
-        if (count($completed) > 0) {
-            $output->writeln('<comment>Completed:</comment>');
-            foreach ($completed as $step) {
-                $output->writeln("  <info>✓</info> {$step->name}");
-            }
-            $output->writeln('');
-        }
-
-        // Remaining steps
-        if (count($remaining) > 0) {
-            $output->writeln('<comment>Remaining:</comment>');
-            foreach ($remaining as $step) {
-                $marker = $step->required ? '<fg=red>*</>' : '<fg=gray>○</>';
-                $output->writeln("  {$marker} {$step->name}");
-            }
-            $output->writeln('');
-            $output->writeln('<fg=gray>* = required, ○ = optional</>');
-        }
-
-        return self::SUCCESS;
+        return $this->startNewWorkflow($guide, $choice, $output, $workingDir);
     }
 
     private function showHistory(WorkflowGuide $guide, OutputInterface $output): int
@@ -362,8 +301,12 @@ class NextCommand extends Command
         return self::SUCCESS;
     }
 
-    private function skipStep(WorkflowGuide $guide, GuideStep $step, OutputInterface $output): int
-    {
+    private function skipStepDirectly(
+        WorkflowGuide $guide,
+        GuideStep $step,
+        OutputInterface $output,
+        string $workingDir,
+    ): int {
         if ($step->required) {
             warning("Cannot skip '{$step->name}' - this step is required.");
 
@@ -373,202 +316,16 @@ class NextCommand extends Command
         $guide->markSkipped($step->id);
         info("Skipped: {$step->name}");
 
-        $next = $guide->currentStep();
-        if ($next) {
-            $output->writeln('');
-            note("Next up: {$next->name}");
-            $output->writeln('Run <info>laraforge next</info> to continue.');
-        }
+        // Continue with interactive suggestion
+        $this->promptNextAction($guide, $output, $workingDir);
 
         return self::SUCCESS;
-    }
-
-    private function handleCurrentStep(
-        WorkflowGuide $guide,
-        GuideStep $step,
-        InputInterface $input,
-        OutputInterface $output
-    ): int {
-        $type = $guide->currentWorkflowType();
-        $output->writeln('');
-
-        // Show workflow context
-        if ($type) {
-            $name = $guide->workflowName();
-            $progress = $guide->progressPercentage();
-            $output->writeln("<fg=cyan>{$type->icon()} {$type->label()}</> {$name} <fg=gray>[{$progress}%]</>");
-            $output->writeln('');
-        }
-
-        // Show step header
-        $marker = $step->required ? '<fg=red>[Required]</>' : '<fg=yellow>[Optional]</>';
-        $phase = '<fg=cyan>'.ucfirst($step->phase).'</>';
-        $output->writeln("{$marker} {$phase}");
-        $output->writeln("<comment>{$step->name}</comment>");
-        $output->writeln(str_repeat('─', 50));
-        $output->writeln('');
-        $output->writeln($step->description);
-        $output->writeln('');
-
-        // Handle manual steps
-        if ($step->manualStep) {
-            return $this->handleManualStep($guide, $step, $output);
-        }
-
-        // Show command
-        if ($step->command) {
-            $output->writeln('<comment>Command:</comment>');
-            $output->writeln("  <info>{$step->command}</info>");
-
-            if ($step->hasAlternative()) {
-                $output->writeln('');
-                $output->writeln('<comment>Alternative:</comment>');
-                $output->writeln("  <info>{$step->alternativeCommand}</info>");
-            }
-            $output->writeln('');
-        }
-
-        // Auto mode
-        if ($input->getOption('auto') && $step->hasCommand()) {
-            return $this->executeStep($guide, $step, $output);
-        }
-
-        return $this->promptForAction($guide, $step, $output);
-    }
-
-    private function promptForAction(WorkflowGuide $guide, GuideStep $step, OutputInterface $output): int
-    {
-        $options = [];
-
-        if ($step->hasCommand()) {
-            $options['run'] = 'Run this command';
-        }
-
-        if ($step->hasAlternative()) {
-            $options['alternative'] = 'Run alternative command';
-        }
-
-        if ($step->canSkip()) {
-            $options['skip'] = 'Skip this step';
-        }
-
-        $options['later'] = 'Do this later (exit)';
-        $options['done'] = 'I already did this (mark complete)';
-
-        $action = select(
-            label: 'What would you like to do?',
-            options: $options,
-            default: $step->hasCommand() ? 'run' : 'done',
-        );
-
-        return match ($action) {
-            'run' => $this->executeStep($guide, $step, $output),
-            'alternative' => $this->executeStep($guide, $step, $output, useAlternative: true),
-            'skip' => $this->skipStep($guide, $step, $output),
-            'done' => $this->markDone($guide, $step, $output),
-            'later' => self::SUCCESS,
-            default => self::SUCCESS,
-        };
-    }
-
-    private function executeStep(
-        WorkflowGuide $guide,
-        GuideStep $step,
-        OutputInterface $output,
-        bool $useAlternative = false
-    ): int {
-        $command = $useAlternative ? $step->alternativeCommand : $step->command;
-
-        if (! $command) {
-            warning('No command to execute.');
-
-            return self::FAILURE;
-        }
-
-        $output->writeln('');
-        $output->writeln("<comment>Running:</comment> <info>{$command}</info>");
-        $output->writeln('');
-
-        $process = Process::fromShellCommandline($command, $this->laraforge->workingDirectory());
-        $process->setTimeout(300);
-        $process->setTty(Process::isTtySupported());
-
-        $exitCode = $process->run(function ($type, $buffer) use ($output): void {
-            $output->write($buffer);
-        });
-
-        $output->writeln('');
-
-        if ($exitCode === 0) {
-            $guide->markCompleted($step->id);
-            info("✓ {$step->name} completed!");
-            $this->showNextStepHint($guide, $output);
-
-            return self::SUCCESS;
-        }
-
-        warning("Command exited with code {$exitCode}");
-
-        if (confirm('Mark this step as complete anyway?', false)) {
-            $guide->markCompleted($step->id);
-            $this->showNextStepHint($guide, $output);
-        }
-
-        return $exitCode;
-    }
-
-    private function handleManualStep(WorkflowGuide $guide, GuideStep $step, OutputInterface $output): int
-    {
-        note('This is a manual step. Complete it in your editor/IDE.');
-        $output->writeln('');
-
-        $options = [
-            'done' => 'I have completed this step',
-            'later' => 'I\'ll do this later',
-        ];
-
-        if ($step->canSkip()) {
-            $options['skip'] = 'Skip this step';
-        }
-
-        $action = select(
-            label: 'What is the status?',
-            options: $options,
-        );
-
-        return match ($action) {
-            'done' => $this->markDone($guide, $step, $output),
-            'skip' => $this->skipStep($guide, $step, $output),
-            'later' => self::SUCCESS,
-            default => self::SUCCESS,
-        };
-    }
-
-    private function markDone(WorkflowGuide $guide, GuideStep $step, OutputInterface $output): int
-    {
-        $guide->markCompleted($step->id);
-        info("✓ {$step->name} marked as complete!");
-        $this->showNextStepHint($guide, $output);
-
-        return self::SUCCESS;
-    }
-
-    private function showNextStepHint(WorkflowGuide $guide, OutputInterface $output): void
-    {
-        $next = $guide->currentStep();
-
-        if ($next) {
-            $output->writeln('');
-            $stepType = $next->required ? 'Required' : 'Optional';
-            note("Next: {$next->name} ({$stepType})");
-            $output->writeln('Run <info>laraforge next</info> to continue.');
-        }
     }
 
     private function handleSessionConflict(
         SessionManager $sessionManager,
-        \LaraForge\Session\SessionConflict $conflict,
-        OutputInterface $output
+        SessionConflict $conflict,
+        OutputInterface $output,
     ): int {
         $output->writeln('');
         error('⚠️  Session Conflict Detected');
@@ -643,7 +400,7 @@ class NextCommand extends Command
             required: true,
         );
 
-        $process = Process::fromShellCommandline(
+        $process = \Symfony\Component\Process\Process::fromShellCommandline(
             'git checkout -b '.escapeshellarg($branchName),
             $this->laraforge->workingDirectory()
         );

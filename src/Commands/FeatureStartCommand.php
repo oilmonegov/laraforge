@@ -97,8 +97,8 @@ class FeatureStartCommand extends Command
         $guide = new WorkflowGuide($workingDir);
         $guide->startWorkflow(WorkflowType::FEATURE, $title);
 
-        // Suggest what's next
-        $this->showNextStepSuggestion($guide, $output);
+        // Suggest what's next (interactive)
+        $this->showNextStepSuggestion($guide, $output, $workingDir);
 
         return self::SUCCESS;
     }

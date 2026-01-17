@@ -7,6 +7,7 @@ namespace LaraForge\Commands\Concerns;
 use LaraForge\Guide\GuideStep;
 use LaraForge\Guide\WorkflowGuide;
 use LaraForge\Guide\WorkflowType;
+use LaraForge\Session\SessionManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -29,6 +30,10 @@ trait SuggestsNextStep
         // Mark this step as completed
         $guide->markCompleted($stepId);
 
+        // Update session heartbeat
+        $sessionManager = new SessionManager($workingDir);
+        $sessionManager->heartbeat();
+
         // Prompt for next action
         $this->promptNextAction($guide, $output, $workingDir);
     }
@@ -42,6 +47,11 @@ trait SuggestsNextStep
         ?string $workingDirectory = null,
     ): void {
         $workingDir = $workingDirectory ?? $this->laraforge->workingDirectory();
+
+        // Update session heartbeat
+        $sessionManager = new SessionManager($workingDir);
+        $sessionManager->heartbeat();
+
         $this->promptNextAction($guide, $output, $workingDir);
     }
 
