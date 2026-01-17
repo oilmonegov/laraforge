@@ -36,29 +36,79 @@ composer global require oilmonegov/laraforge
 
 ## Quick Start
 
-### For New Projects
+The easiest way to use LaraForge is with the interactive guided workflow:
 
 ```bash
-# Initialize with interactive setup
-laraforge init
-
-# Answer questions about:
-# - Project scale (users, records, traffic)
-# - Technology stack preferences
-# - UI framework choices
-# - Storage requirements
+# Just run this - LaraForge guides you through everything
+./vendor/bin/laraforge next
 ```
 
-### For Existing Projects
+That's it! LaraForge will:
+1. **Detect your project state** and start the appropriate workflow
+2. **Show you what's next** with selectable options (just press Enter)
+3. **Execute commands for you** or let you skip/customize
+4. **Track your progress** across sessions
+
+### Interactive Workflow Features
+
+- **No memorization needed** - Select from options, don't type commands
+- **Smart detection** - Auto-detects completed steps (git init, project init, etc.)
+- **Multiple workflow types** - Feature, Bugfix, Refactor, Hotfix
+- **Parallel agent support** - Detects conflicts when multiple agents work on same branch
+- **Session tracking** - Pick up where you left off
+
+### Example Flow
+
+```
+$ ./vendor/bin/laraforge next
+
+Welcome to LaraForge!
+Let's set up your project.
+
+🚀 Onboarding "Project Setup" [0%]
+
+┌─────────────────────────────────────────────────────┐
+│  What's Next?                                       │
+└─────────────────────────────────────────────────────┘
+
+[Required] Initialize LaraForge - Set up LaraForge configuration
+❯ Run: laraforge init
+  Run a custom command...
+  Show full status
+  Exit (continue later)
+```
+
+### Manual Commands
+
+You can also use individual commands directly:
 
 ```bash
-# Analyze existing project and generate recommendations
-laraforge init --existing
+# Initialize LaraForge
+./vendor/bin/laraforge init
 
-# LaraForge will detect:
-# - Framework (Laravel, Symfony, etc.)
-# - Existing patterns and conventions
-# - Technology stack from composer.json
+# Start a specific workflow
+./vendor/bin/laraforge next --start feature
+./vendor/bin/laraforge next --start bugfix
+
+# Import an existing PRD
+./vendor/bin/laraforge prd:import path/to/your-prd.md
+
+# Check workflow status
+./vendor/bin/laraforge next --status
+
+# List remaining steps
+./vendor/bin/laraforge next --list
+```
+
+### For Existing Projects with PRD
+
+If you already have a Product Requirements Document:
+
+```bash
+# Import your PRD (supports markdown, text formats)
+./vendor/bin/laraforge prd:import my-project-prd.md
+
+# LaraForge will parse and normalize it, then guide you to create FRD
 ```
 
 ## Architecture
@@ -457,16 +507,35 @@ The `.laraforge/` directory allows project-level customization:
 
 ## CLI Commands
 
+### Core Commands
+
 | Command | Description |
 |---------|-------------|
+| `laraforge next` | **Interactive guided workflow** - shows and runs next step |
 | `laraforge init` | Initialize LaraForge in your project |
-| `laraforge init --existing` | Initialize in existing project |
-| `laraforge status` | Show project status and progress |
+| `laraforge prd:import <file>` | Import an external PRD file |
 | `laraforge feature:start` | Start a new feature workflow |
+| `laraforge hooks:install` | Install git hooks for code quality |
+
+### Workflow Options
+
+| Option | Description |
+|--------|-------------|
+| `laraforge next --start <type>` | Start a new workflow (feature, bugfix, refactor, hotfix) |
+| `laraforge next --status` | Show current workflow progress |
+| `laraforge next --list` | List all remaining steps |
+| `laraforge next --skip` | Skip the current optional step |
+| `laraforge next --end` | End the current workflow |
+| `laraforge next --history` | Show workflow history |
+
+### Other Commands
+
+| Command | Description |
+|---------|-------------|
 | `laraforge skill:run [name]` | Execute a skill |
 | `laraforge generators` | List available generators |
 | `laraforge generate [name]` | Run a generator |
-| `laraforge worktree:create` | Create a git worktree for parallel work |
+| `laraforge worktree` | Manage git worktrees for parallel work |
 
 ## Requirements
 
