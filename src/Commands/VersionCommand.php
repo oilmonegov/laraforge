@@ -30,7 +30,7 @@ final class VersionCommand extends Command
 
         // Show plugins
         $plugins = $this->laraforge->plugins();
-        if (!empty($plugins)) {
+        if (! empty($plugins)) {
             $output->writeln('');
             $output->writeln('Plugins:');
 
@@ -47,7 +47,7 @@ final class VersionCommand extends Command
 
         // Show adapters
         $adapters = $this->laraforge->adapters();
-        if (!empty($adapters)) {
+        if (! empty($adapters)) {
             $output->writeln('');
             $output->writeln('Adapters:');
 

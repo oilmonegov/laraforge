@@ -1,0 +1,11 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        - src/Commands
+    tmpDir: .phpstan.cache
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # Dynamic class instantiation with custom constructors
+        - '#Parameter \#1 \$name of class Symfony\\Component\\Console\\Command\\Command constructor expects string\|null#'

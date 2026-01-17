@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaraForge;
 
-use LaraForge\Commands\InitCommand;
 use LaraForge\Commands\GenerateCommand;
+use LaraForge\Commands\InitCommand;
 use LaraForge\Commands\ListGeneratorsCommand;
 use LaraForge\Commands\VersionCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -20,7 +20,7 @@ final class Application extends ConsoleApplication
     {
         parent::__construct('LaraForge', LaraForge::VERSION);
 
-        $this->laraforge = new LaraForge();
+        $this->laraforge = new LaraForge;
         $this->registerCommands();
     }
 

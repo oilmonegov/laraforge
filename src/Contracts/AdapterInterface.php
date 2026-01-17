@@ -6,7 +6,7 @@ namespace LaraForge\Contracts;
 
 /**
  * Interface for framework adapters.
- * 
+ *
  * Adapters allow LaraForge to integrate with different frameworks
  * (Laravel, Symfony, Slim, vanilla PHP, etc.)
  */

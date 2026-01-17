@@ -19,17 +19,16 @@ interface ConfigLoaderInterface
     /**
      * Get a configuration value.
      *
-     * @param string $key Dot-notation key (e.g., 'project.name')
-     * @param mixed $default Default value if key doesn't exist
-     * @return mixed
+     * @param  string  $key  Dot-notation key (e.g., 'project.name')
+     * @param  mixed  $default  Default value if key doesn't exist
      */
     public function get(string $key, mixed $default = null): mixed;
 
     /**
      * Set a configuration value.
      *
-     * @param string $key Dot-notation key
-     * @param mixed $value Value to set
+     * @param  string  $key  Dot-notation key
+     * @param  mixed  $value  Value to set
      */
     public function set(string $key, mixed $value): void;
 
@@ -48,7 +47,7 @@ interface ConfigLoaderInterface
     /**
      * Merge configuration with existing values.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     public function merge(array $config): void;
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace LaraForge\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->filesystem = new Filesystem();
+        $this->filesystem = new Filesystem;
     }
 
     protected function tearDown(): void
@@ -31,7 +31,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function createTempDirectory(): string
     {
-        $this->tempDirectory = sys_get_temp_dir() . '/laraforge-test-' . uniqid();
+        $this->tempDirectory = sys_get_temp_dir().'/laraforge-test-'.uniqid();
         $this->filesystem->mkdir($this->tempDirectory);
 
         return $this->tempDirectory;
@@ -39,7 +39,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function createFile(string $relativePath, string $content = ''): string
     {
-        $path = $this->tempDirectory . '/' . ltrim($relativePath, '/');
+        $path = $this->tempDirectory.'/'.ltrim($relativePath, '/');
         $this->filesystem->mkdir(dirname($path));
         $this->filesystem->dumpFile($path, $content);
 

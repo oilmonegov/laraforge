@@ -10,7 +10,7 @@ use LaraForge\LaraForge;
 |--------------------------------------------------------------------------
 */
 
-pest()->extend(Tests\TestCase::class)->in('Feature', 'Unit');
+pest()->extend(\LaraForge\Tests\TestCase::class)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -33,12 +33,12 @@ expect()->extend('toBeValidGenerator', function () {
 
 function laraforge(?string $workingDirectory = null): LaraForge
 {
-    return new LaraForge($workingDirectory ?? sys_get_temp_dir() . '/laraforge-test-' . uniqid());
+    return new LaraForge($workingDirectory ?? sys_get_temp_dir().'/laraforge-test-'.uniqid());
 }
 
 function createTempDirectory(): string
 {
-    $path = sys_get_temp_dir() . '/laraforge-test-' . uniqid();
+    $path = sys_get_temp_dir().'/laraforge-test-'.uniqid();
     mkdir($path, 0755, true);
 
     return $path;

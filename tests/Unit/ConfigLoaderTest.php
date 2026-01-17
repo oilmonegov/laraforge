@@ -8,15 +8,15 @@ use LaraForge\Exceptions\ConfigurationException;
 describe('ConfigLoader', function () {
     it('can load yaml config', function () {
         $tempDir = createTempDirectory();
-        $configPath = $tempDir . '/config.yaml';
+        $configPath = $tempDir.'/config.yaml';
 
-        file_put_contents($configPath, <<<YAML
+        file_put_contents($configPath, <<<'YAML'
 project:
   name: test-project
   version: 1.0.0
 YAML);
 
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $config = $loader->load($configPath);
 
         expect($config)->toBe([
@@ -29,7 +29,7 @@ YAML);
 
     it('can load json config', function () {
         $tempDir = createTempDirectory();
-        $configPath = $tempDir . '/config.json';
+        $configPath = $tempDir.'/config.json';
 
         file_put_contents($configPath, json_encode([
             'project' => [
@@ -37,14 +37,14 @@ YAML);
             ],
         ]));
 
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $config = $loader->load($configPath);
 
         expect($config['project']['name'])->toBe('test-project');
     });
 
     it('throws exception for non-existent file', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
 
         expect(fn () => $loader->load('/non/existent/file.yaml'))
             ->toThrow(ConfigurationException::class);
@@ -52,17 +52,17 @@ YAML);
 
     it('throws exception for unsupported format', function () {
         $tempDir = createTempDirectory();
-        $configPath = $tempDir . '/config.txt';
+        $configPath = $tempDir.'/config.txt';
         file_put_contents($configPath, 'some text');
 
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
 
         expect(fn () => $loader->load($configPath))
             ->toThrow(ConfigurationException::class, 'Unsupported configuration format');
     });
 
     it('can get nested config with dot notation', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $loader->merge([
             'project' => [
                 'name' => 'test',
@@ -77,13 +77,13 @@ YAML);
     });
 
     it('returns default for non-existent key', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
 
         expect($loader->get('non.existent', 'default'))->toBe('default');
     });
 
     it('can set config with dot notation', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $loader->set('project.name', 'test');
         $loader->set('project.nested.value', 'deep');
 
@@ -92,7 +92,7 @@ YAML);
     });
 
     it('can check if key exists', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $loader->set('existing.key', 'value');
 
         expect($loader->has('existing.key'))->toBeTrue();
@@ -100,14 +100,14 @@ YAML);
     });
 
     it('can get all config', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $loader->merge(['key' => 'value']);
 
         expect($loader->all())->toBe(['key' => 'value']);
     });
 
     it('merges config recursively', function () {
-        $loader = new ConfigLoader();
+        $loader = new ConfigLoader;
         $loader->merge([
             'project' => [
                 'name' => 'original',

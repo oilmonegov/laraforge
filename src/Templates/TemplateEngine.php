@@ -17,11 +17,12 @@ final class TemplateEngine implements TemplateEngineInterface
 
     public function render(string $template, array $variables = []): string
     {
-        // Replace {{ variable }} syntax
+        // Replace {{ variable }} syntax (including @index, @first, @last in loops)
         $content = preg_replace_callback(
-            '/\{\{\s*(\w+)\s*\}\}/',
+            '/\{\{\s*(@?\w+)\s*\}\}/',
             function (array $matches) use ($variables): string {
                 $key = $matches[1];
+
                 return (string) ($variables[$key] ?? $matches[0]);
             },
             $template
@@ -32,6 +33,7 @@ final class TemplateEngine implements TemplateEngineInterface
             '/\{!!\s*(\w+)\s*!!\}/',
             function (array $matches) use ($variables): string {
                 $key = $matches[1];
+
                 return (string) ($variables[$key] ?? $matches[0]);
             },
             $content
@@ -80,9 +82,10 @@ final class TemplateEngine implements TemplateEngineInterface
 
         // Search in order of priority
         foreach ($sortedPaths as $pathInfo) {
-            $fullPath = rtrim($pathInfo['path'], '/') . '/' . ltrim($relativePath, '/');
+            $fullPath = rtrim($pathInfo['path'], '/').'/'.ltrim($relativePath, '/');
             if (file_exists($fullPath)) {
                 $this->resolvedCache[$relativePath] = $fullPath;
+
                 return $fullPath;
             }
         }
@@ -138,7 +141,7 @@ final class TemplateEngine implements TemplateEngineInterface
 
                 $items = $variables[$key] ?? [];
 
-                if (!is_array($items)) {
+                if (! is_array($items)) {
                     return '';
                 }
 

@@ -10,7 +10,7 @@ class ValidationException extends LaraForgeException
     private array $errors;
 
     /**
-     * @param array<string, array<string>> $errors
+     * @param  array<string, array<string>>  $errors
      */
     public function __construct(array $errors, string $message = 'Validation failed')
     {

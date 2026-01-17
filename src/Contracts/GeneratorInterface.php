@@ -6,7 +6,7 @@ namespace LaraForge\Contracts;
 
 /**
  * Interface for file generators.
- * 
+ *
  * Generators create files from templates/stubs with variable substitution.
  */
 interface GeneratorInterface
@@ -29,7 +29,7 @@ interface GeneratorInterface
     /**
      * Generate files based on the provided options.
      *
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      * @return array<string> List of generated file paths
      */
     public function generate(array $options): array;
@@ -44,7 +44,8 @@ interface GeneratorInterface
     /**
      * Validate the provided options.
      *
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
+     *
      * @throws \LaraForge\Exceptions\ValidationException
      */
     public function validate(array $options): void;

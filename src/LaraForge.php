@@ -39,8 +39,8 @@ final class LaraForge implements LaraForgeInterface
     public function __construct(?string $workingDirectory = null)
     {
         $this->workingDirectory = $workingDirectory ?? getcwd() ?: '.';
-        $this->config = new ConfigLoader();
-        $this->templates = new TemplateEngine();
+        $this->config = new ConfigLoader;
+        $this->templates = new TemplateEngine;
 
         $this->initialize();
     }
@@ -48,15 +48,15 @@ final class LaraForge implements LaraForgeInterface
     private function initialize(): void
     {
         // Add core templates path
-        $this->templates->addPath(__DIR__ . '/../resources/templates', 0);
+        $this->templates->addPath(__DIR__.'/../resources/templates', 0);
 
         // Add override path (highest priority)
         if ($this->hasOverrides()) {
-            $this->templates->addPath($this->overridePath() . '/templates', 100);
+            $this->templates->addPath($this->overridePath().'/templates', 100);
         }
 
         // Load core configuration
-        $coreConfigPath = __DIR__ . '/../resources/config/laraforge.yaml';
+        $coreConfigPath = __DIR__.'/../resources/config/laraforge.yaml';
         if (file_exists($coreConfigPath)) {
             $this->config->merge($this->config->load($coreConfigPath));
         }
@@ -68,10 +68,10 @@ final class LaraForge implements LaraForgeInterface
     private function loadProjectConfig(): void
     {
         $configFiles = [
-            $this->workingDirectory . '/laraforge.yaml',
-            $this->workingDirectory . '/laraforge.yml',
-            $this->workingDirectory . '/.laraforge/config.yaml',
-            $this->workingDirectory . '/.laraforge/config.yml',
+            $this->workingDirectory.'/laraforge.yaml',
+            $this->workingDirectory.'/laraforge.yml',
+            $this->workingDirectory.'/.laraforge/config.yaml',
+            $this->workingDirectory.'/.laraforge/config.yml',
         ];
 
         foreach ($configFiles as $configFile) {
@@ -195,7 +195,7 @@ final class LaraForge implements LaraForgeInterface
 
     public function overridePath(): string
     {
-        return $this->workingDirectory . '/.laraforge';
+        return $this->workingDirectory.'/.laraforge';
     }
 
     public function hasOverrides(): bool

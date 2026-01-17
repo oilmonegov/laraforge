@@ -6,7 +6,7 @@ namespace LaraForge\Contracts;
 
 /**
  * Interface for LaraForge plugins.
- * 
+ *
  * Plugins can extend LaraForge with additional generators, commands,
  * templates, and functionality.
  */

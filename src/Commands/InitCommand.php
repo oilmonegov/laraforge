@@ -35,14 +35,14 @@ final class InitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $workingDir = $this->laraforge->workingDirectory();
-        $laraforgeDir = $workingDir . '/.laraforge';
-        $filesystem = new Filesystem();
+        $laraforgeDir = $workingDir.'/.laraforge';
+        $filesystem = new Filesystem;
 
         // Check if already initialized
-        if ($filesystem->exists($laraforgeDir) && !$input->getOption('force')) {
+        if ($filesystem->exists($laraforgeDir) && ! $input->getOption('force')) {
             warning('LaraForge is already initialized in this project.');
 
-            if (!confirm('Do you want to reinitialize?', false)) {
+            if (! confirm('Do you want to reinitialize?', false)) {
                 return self::SUCCESS;
             }
         }
@@ -107,18 +107,18 @@ final class InitCommand extends Command
             callback: function () use ($filesystem, $laraforgeDir, $projectName, $projectDescription, $framework, $aiTools, $features): void {
                 // Create .laraforge directory
                 $filesystem->mkdir($laraforgeDir);
-                $filesystem->mkdir($laraforgeDir . '/templates');
-                $filesystem->mkdir($laraforgeDir . '/stubs');
-                $filesystem->mkdir($laraforgeDir . '/plugins');
+                $filesystem->mkdir($laraforgeDir.'/templates');
+                $filesystem->mkdir($laraforgeDir.'/stubs');
+                $filesystem->mkdir($laraforgeDir.'/plugins');
 
                 // Create config.yaml
                 $config = $this->generateConfig($projectName, $projectDescription, $framework, $aiTools, $features);
-                $filesystem->dumpFile($laraforgeDir . '/config.yaml', $config);
+                $filesystem->dumpFile($laraforgeDir.'/config.yaml', $config);
 
                 // Create .gitkeep files
-                $filesystem->touch($laraforgeDir . '/templates/.gitkeep');
-                $filesystem->touch($laraforgeDir . '/stubs/.gitkeep');
-                $filesystem->touch($laraforgeDir . '/plugins/.gitkeep');
+                $filesystem->touch($laraforgeDir.'/templates/.gitkeep');
+                $filesystem->touch($laraforgeDir.'/stubs/.gitkeep');
+                $filesystem->touch($laraforgeDir.'/plugins/.gitkeep');
             },
         );
 
@@ -156,18 +156,18 @@ final class InitCommand extends Command
     private function detectFramework(string $path): string
     {
         // Check for Laravel
-        if (file_exists($path . '/artisan') && file_exists($path . '/bootstrap/app.php')) {
+        if (file_exists($path.'/artisan') && file_exists($path.'/bootstrap/app.php')) {
             return 'laravel';
         }
 
         // Check for Symfony
-        if (file_exists($path . '/bin/console') && file_exists($path . '/config/bundles.php')) {
+        if (file_exists($path.'/bin/console') && file_exists($path.'/config/bundles.php')) {
             return 'symfony';
         }
 
         // Check for Slim
-        if (file_exists($path . '/composer.json')) {
-            $composer = json_decode(file_get_contents($path . '/composer.json'), true);
+        if (file_exists($path.'/composer.json')) {
+            $composer = json_decode(file_get_contents($path.'/composer.json'), true);
             if (isset($composer['require']['slim/slim'])) {
                 return 'slim';
             }
@@ -177,8 +177,8 @@ final class InitCommand extends Command
     }
 
     /**
-     * @param array<string> $aiTools
-     * @param array<string> $features
+     * @param  array<string>  $aiTools
+     * @param  array<string>  $features
      */
     private function generateConfig(
         string $projectName,
@@ -197,12 +197,12 @@ final class InitCommand extends Command
             'features' => array_fill_keys($features, true),
         ];
 
-        return "# LaraForge Configuration\n# Documentation: https://github.com/oilmonegov/laraforge\n\n" .
+        return "# LaraForge Configuration\n# Documentation: https://github.com/oilmonegov/laraforge\n\n".
             \Symfony\Component\Yaml\Yaml::dump($config, 4, 2);
     }
 
     /**
-     * @param array<string> $features
+     * @param  array<string>  $features
      */
     private function generateClaudeMd(
         Filesystem $filesystem,
@@ -219,7 +219,7 @@ final class InitCommand extends Command
             'hasAgents' => in_array('agents', $features, true),
         ]);
 
-        $filesystem->dumpFile($workingDir . '/CLAUDE.md', $content);
+        $filesystem->dumpFile($workingDir.'/CLAUDE.md', $content);
     }
 
     private function generateCursorRules(Filesystem $filesystem, string $workingDir, string $projectName): void
@@ -228,23 +228,23 @@ final class InitCommand extends Command
             $content = $this->laraforge->templates()->renderFile('cursor/rules.template', [
                 'projectName' => $projectName,
             ]);
-            $filesystem->dumpFile($workingDir . '/.cursorrules', $content);
+            $filesystem->dumpFile($workingDir.'/.cursorrules', $content);
         }
     }
 
     private function generateVsCodeSettings(Filesystem $filesystem, string $workingDir): void
     {
-        $vscodeDir = $workingDir . '/.vscode';
+        $vscodeDir = $workingDir.'/.vscode';
         $filesystem->mkdir($vscodeDir);
 
         if ($this->laraforge->templates()->exists('vscode/settings.json')) {
             $content = $this->laraforge->templates()->renderFile('vscode/settings.json', []);
-            $filesystem->dumpFile($vscodeDir . '/settings.json', $content);
+            $filesystem->dumpFile($vscodeDir.'/settings.json', $content);
         }
 
         if ($this->laraforge->templates()->exists('vscode/extensions.json')) {
             $content = $this->laraforge->templates()->renderFile('vscode/extensions.json', []);
-            $filesystem->dumpFile($vscodeDir . '/extensions.json', $content);
+            $filesystem->dumpFile($vscodeDir.'/extensions.json', $content);
         }
     }
 }

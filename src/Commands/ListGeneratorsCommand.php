@@ -26,6 +26,7 @@ final class ListGeneratorsCommand extends Command
         if (empty($generators)) {
             warning('No generators available.');
             info('Install a framework adapter (e.g., oilmonegov/laraforge-laravel) to get started.');
+
             return self::SUCCESS;
         }
 

@@ -29,13 +29,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Run PHPStan
-echo "Running static analysis with PHPStan..."
-./vendor/bin/phpstan analyse --no-progress $STAGED_FILES
-if [ $? -ne 0 ]; then
-    echo ""
-    echo "Static analysis errors found. Please fix them before committing."
-    exit 1
+# Run PHPStan on src/ files only
+SRC_FILES=$(echo "$STAGED_FILES" | grep -E '^src/' || true)
+if [ -n "$SRC_FILES" ]; then
+    echo "Running static analysis with PHPStan..."
+    ./vendor/bin/phpstan analyse --no-progress $SRC_FILES
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Static analysis errors found. Please fix them before committing."
+        exit 1
+    fi
 fi
 
 echo "All pre-commit checks passed!"

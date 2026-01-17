@@ -6,6 +6,4 @@ namespace LaraForge\Exceptions;
 
 use Exception;
 
-class LaraForgeException extends Exception
-{
-}
+class LaraForgeException extends Exception {}

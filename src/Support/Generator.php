@@ -16,7 +16,7 @@ abstract class Generator implements GeneratorInterface
     public function __construct(
         protected readonly LaraForgeInterface $laraforge,
     ) {
-        $this->filesystem = new Filesystem();
+        $this->filesystem = new Filesystem;
     }
 
     public function options(): array
@@ -29,12 +29,12 @@ abstract class Generator implements GeneratorInterface
         $errors = [];
 
         foreach ($this->options() as $name => $config) {
-            if ($config['required'] && !isset($options[$name])) {
+            if ($config['required'] && ! isset($options[$name])) {
                 $errors[$name] = ["{$name} is required"];
             }
         }
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             throw new ValidationException($errors);
         }
     }
@@ -42,8 +42,8 @@ abstract class Generator implements GeneratorInterface
     /**
      * Render a stub file with the given variables.
      *
-     * @param string $stub The stub filename (without extension)
-     * @param array<string, mixed> $variables
+     * @param  string  $stub  The stub filename (without extension)
+     * @param  array<string, mixed>  $variables
      */
     protected function renderStub(string $stub, array $variables = []): string
     {
@@ -55,15 +55,15 @@ abstract class Generator implements GeneratorInterface
     /**
      * Write content to a file.
      *
-     * @param string $relativePath Path relative to working directory
-     * @param string $content Content to write
+     * @param  string  $relativePath  Path relative to working directory
+     * @param  string  $content  Content to write
      */
     protected function writeFile(string $relativePath, string $content): string
     {
-        $fullPath = $this->laraforge->workingDirectory() . '/' . ltrim($relativePath, '/');
+        $fullPath = $this->laraforge->workingDirectory().'/'.ltrim($relativePath, '/');
         $directory = dirname($fullPath);
 
-        if (!$this->filesystem->exists($directory)) {
+        if (! $this->filesystem->exists($directory)) {
             $this->filesystem->mkdir($directory);
         }
 

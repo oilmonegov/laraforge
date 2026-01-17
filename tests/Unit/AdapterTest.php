@@ -25,17 +25,17 @@ class TestAdapter extends Adapter
 
     public function isApplicable(string $projectPath): bool
     {
-        return file_exists($projectPath . '/test-marker.txt');
+        return file_exists($projectPath.'/test-marker.txt');
     }
 
     public function templatesPath(): string
     {
-        return __DIR__ . '/fixtures/templates';
+        return __DIR__.'/fixtures/templates';
     }
 
     public function stubsPath(): string
     {
-        return __DIR__ . '/fixtures/stubs';
+        return __DIR__.'/fixtures/stubs';
     }
 }
 
@@ -55,7 +55,7 @@ class HighPriorityAdapter extends TestAdapter
 describe('Adapter', function () {
     it('can register an adapter', function () {
         $laraforge = laraforge();
-        $adapter = new TestAdapter();
+        $adapter = new TestAdapter;
 
         $laraforge->registerAdapter($adapter);
 
@@ -65,17 +65,17 @@ describe('Adapter', function () {
     it('returns null adapter when none applicable', function () {
         $tempDir = createTempDirectory();
         $laraforge = new LaraForge($tempDir);
-        $laraforge->registerAdapter(new TestAdapter());
+        $laraforge->registerAdapter(new TestAdapter);
 
         expect($laraforge->adapter())->toBeNull();
     });
 
     it('returns applicable adapter', function () {
         $tempDir = createTempDirectory();
-        file_put_contents($tempDir . '/test-marker.txt', '');
+        file_put_contents($tempDir.'/test-marker.txt', '');
 
         $laraforge = new LaraForge($tempDir);
-        $laraforge->registerAdapter(new TestAdapter());
+        $laraforge->registerAdapter(new TestAdapter);
 
         expect($laraforge->adapter())
             ->toBeInstanceOf(AdapterInterface::class)
@@ -84,21 +84,21 @@ describe('Adapter', function () {
 
     it('selects highest priority adapter when multiple apply', function () {
         $tempDir = createTempDirectory();
-        file_put_contents($tempDir . '/test-marker.txt', '');
+        file_put_contents($tempDir.'/test-marker.txt', '');
 
         $laraforge = new LaraForge($tempDir);
-        $laraforge->registerAdapter(new TestAdapter()); // priority 10
-        $laraforge->registerAdapter(new HighPriorityAdapter()); // priority 100
+        $laraforge->registerAdapter(new TestAdapter); // priority 10
+        $laraforge->registerAdapter(new HighPriorityAdapter); // priority 100
 
         expect($laraforge->adapter()->identifier())->toBe('high-priority');
     });
 
     it('caches active adapter', function () {
         $tempDir = createTempDirectory();
-        file_put_contents($tempDir . '/test-marker.txt', '');
+        file_put_contents($tempDir.'/test-marker.txt', '');
 
         $laraforge = new LaraForge($tempDir);
-        $laraforge->registerAdapter(new TestAdapter());
+        $laraforge->registerAdapter(new TestAdapter);
 
         $adapter1 = $laraforge->adapter();
         $adapter2 = $laraforge->adapter();
@@ -109,10 +109,10 @@ describe('Adapter', function () {
     it('resets cached adapter when working directory changes', function () {
         $tempDir1 = createTempDirectory();
         $tempDir2 = createTempDirectory();
-        file_put_contents($tempDir1 . '/test-marker.txt', '');
+        file_put_contents($tempDir1.'/test-marker.txt', '');
 
         $laraforge = new LaraForge($tempDir1);
-        $laraforge->registerAdapter(new TestAdapter());
+        $laraforge->registerAdapter(new TestAdapter);
 
         expect($laraforge->adapter())->not->toBeNull();
 

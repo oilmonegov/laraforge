@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use LaraForge\Templates\TemplateEngine;
 use LaraForge\Exceptions\TemplateException;
+use LaraForge\Templates\TemplateEngine;
 
 describe('TemplateEngine', function () {
     it('replaces simple variables', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $result = $engine->render('Hello {{ name }}!', ['name' => 'World']);
 
@@ -15,7 +15,7 @@ describe('TemplateEngine', function () {
     });
 
     it('replaces multiple variables', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $result = $engine->render(
             '{{ greeting }}, {{ name }}!',
@@ -26,7 +26,7 @@ describe('TemplateEngine', function () {
     });
 
     it('leaves unmatched variables as-is', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $result = $engine->render('Hello {{ name }}!', []);
 
@@ -34,7 +34,7 @@ describe('TemplateEngine', function () {
     });
 
     it('handles variables with spaces', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $result = $engine->render('Hello {{  name  }}!', ['name' => 'World']);
 
@@ -42,7 +42,7 @@ describe('TemplateEngine', function () {
     });
 
     it('handles raw output syntax', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $result = $engine->render('Hello {!! name !!}!', ['name' => 'World']);
 
@@ -50,7 +50,7 @@ describe('TemplateEngine', function () {
     });
 
     it('processes if conditionals when true', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $template = '{{#if showGreeting}}Hello{{/if}}';
         $result = $engine->render($template, ['showGreeting' => true]);
@@ -59,7 +59,7 @@ describe('TemplateEngine', function () {
     });
 
     it('removes if conditionals when false', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $template = '{{#if showGreeting}}Hello{{/if}}';
         $result = $engine->render($template, ['showGreeting' => false]);
@@ -68,7 +68,7 @@ describe('TemplateEngine', function () {
     });
 
     it('processes each loops', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $template = '{{#each items}}{{ this }},{{/each}}';
         $result = $engine->render($template, ['items' => ['a', 'b', 'c']]);
@@ -77,7 +77,7 @@ describe('TemplateEngine', function () {
     });
 
     it('provides loop index in each', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         $template = '{{#each items}}{{ @index }}{{/each}}';
         $result = $engine->render($template, ['items' => ['a', 'b', 'c']]);
@@ -87,10 +87,10 @@ describe('TemplateEngine', function () {
 
     it('can render from file', function () {
         $tempDir = createTempDirectory();
-        $templatePath = $tempDir . '/template.txt';
+        $templatePath = $tempDir.'/template.txt';
         file_put_contents($templatePath, 'Hello {{ name }}!');
 
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
         $engine->addPath($tempDir);
 
         $result = $engine->renderFile('template.txt', ['name' => 'World']);
@@ -99,7 +99,7 @@ describe('TemplateEngine', function () {
     });
 
     it('throws exception for non-existent template', function () {
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
 
         expect(fn () => $engine->renderFile('non-existent.txt'))
             ->toThrow(TemplateException::class);
@@ -109,10 +109,10 @@ describe('TemplateEngine', function () {
         $tempDir1 = createTempDirectory();
         $tempDir2 = createTempDirectory();
 
-        file_put_contents($tempDir1 . '/template.txt', 'Low priority');
-        file_put_contents($tempDir2 . '/template.txt', 'High priority');
+        file_put_contents($tempDir1.'/template.txt', 'Low priority');
+        file_put_contents($tempDir2.'/template.txt', 'High priority');
 
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
         $engine->addPath($tempDir1, 10);
         $engine->addPath($tempDir2, 100);
 
@@ -123,9 +123,9 @@ describe('TemplateEngine', function () {
 
     it('checks if template exists', function () {
         $tempDir = createTempDirectory();
-        file_put_contents($tempDir . '/exists.txt', 'content');
+        file_put_contents($tempDir.'/exists.txt', 'content');
 
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
         $engine->addPath($tempDir);
 
         expect($engine->exists('exists.txt'))->toBeTrue();
@@ -134,12 +134,12 @@ describe('TemplateEngine', function () {
 
     it('resolves correct path for template', function () {
         $tempDir = createTempDirectory();
-        file_put_contents($tempDir . '/template.txt', 'content');
+        file_put_contents($tempDir.'/template.txt', 'content');
 
-        $engine = new TemplateEngine();
+        $engine = new TemplateEngine;
         $engine->addPath($tempDir);
 
-        expect($engine->resolve('template.txt'))->toBe($tempDir . '/template.txt');
+        expect($engine->resolve('template.txt'))->toBe($tempDir.'/template.txt');
         expect($engine->resolve('not-exists.txt'))->toBeNull();
     });
 });

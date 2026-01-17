@@ -15,7 +15,7 @@ final class ConfigLoader implements ConfigLoaderInterface
 
     public function load(string $path): array
     {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new ConfigurationException("Configuration file not found: {$path}");
         }
 
@@ -70,7 +70,7 @@ final class ConfigLoader implements ConfigLoaderInterface
         $value = $this->config;
 
         foreach ($keys as $segment) {
-            if (!is_array($value) || !array_key_exists($segment, $value)) {
+            if (! is_array($value) || ! array_key_exists($segment, $value)) {
                 return $default;
             }
             $value = $value[$segment];
@@ -88,7 +88,7 @@ final class ConfigLoader implements ConfigLoaderInterface
             if ($i === count($keys) - 1) {
                 $config[$segment] = $value;
             } else {
-                if (!isset($config[$segment]) || !is_array($config[$segment])) {
+                if (! isset($config[$segment]) || ! is_array($config[$segment])) {
                     $config[$segment] = [];
                 }
                 $config = &$config[$segment];
@@ -102,7 +102,7 @@ final class ConfigLoader implements ConfigLoaderInterface
         $value = $this->config;
 
         foreach ($keys as $segment) {
-            if (!is_array($value) || !array_key_exists($segment, $value)) {
+            if (! is_array($value) || ! array_key_exists($segment, $value)) {
                 return false;
             }
             $value = $value[$segment];
@@ -122,8 +122,8 @@ final class ConfigLoader implements ConfigLoaderInterface
     }
 
     /**
-     * @param array<string, mixed> $base
-     * @param array<string, mixed> $override
+     * @param  array<string, mixed>  $base
+     * @param  array<string, mixed>  $override
      * @return array<string, mixed>
      */
     private function mergeRecursive(array $base, array $override): array

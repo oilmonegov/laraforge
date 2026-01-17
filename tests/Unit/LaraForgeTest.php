@@ -38,12 +38,12 @@ describe('LaraForge', function () {
         $tempDir = createTempDirectory();
         $laraforge = new LaraForge($tempDir);
 
-        expect($laraforge->overridePath())->toBe($tempDir . '/.laraforge');
+        expect($laraforge->overridePath())->toBe($tempDir.'/.laraforge');
     });
 
     it('detects when overrides exist', function () {
         $tempDir = createTempDirectory();
-        mkdir($tempDir . '/.laraforge', 0755, true);
+        mkdir($tempDir.'/.laraforge', 0755, true);
 
         $laraforge = new LaraForge($tempDir);
 

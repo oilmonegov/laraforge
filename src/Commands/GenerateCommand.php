@@ -36,6 +36,7 @@ final class GenerateCommand extends Command
 
         if (empty($generators)) {
             error('No generators available. Install a framework adapter or plugin.');
+
             return self::FAILURE;
         }
 
@@ -57,7 +58,8 @@ final class GenerateCommand extends Command
 
         if ($generator === null) {
             error("Generator '{$generatorName}' not found.");
-            info('Available generators: ' . implode(', ', array_keys($generators)));
+            info('Available generators: '.implode(', ', array_keys($generators)));
+
             return self::FAILURE;
         }
 
@@ -66,7 +68,7 @@ final class GenerateCommand extends Command
 
         // Prompt for required options that weren't provided
         foreach ($generator->options() as $optionName => $optionConfig) {
-            if ($optionConfig['required'] && !isset($options[$optionName])) {
+            if ($optionConfig['required'] && ! isset($options[$optionName])) {
                 $options[$optionName] = \Laravel\Prompts\text(
                     label: $optionConfig['description'],
                     required: true,
@@ -84,6 +86,7 @@ final class GenerateCommand extends Command
                     $output->writeln("  - {$field}: {$errorMessage}");
                 }
             }
+
             return self::FAILURE;
         }
 
@@ -104,7 +107,7 @@ final class GenerateCommand extends Command
     }
 
     /**
-     * @param array<string> $options
+     * @param  array<string>  $options
      * @return array<string, string>
      */
     private function parseOptions(array $options): array
