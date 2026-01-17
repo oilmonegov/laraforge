@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Models\{{ modelClass }};
+use App\Models\{{ userClass }};
+use App\Policies\{{ className }};
+
+describe('{{ className }}', function () {
+{{#each abilitiesNoModel}}
+    describe('{{ name }}', function () {
+        it('allows authorized user to {{ description }}', function () {
+            $user = {{ userClass }}::factory()->create();
+            $policy = new {{ className }}();
+
+            expect($policy->{{ name }}($user))->toBeTrue();
+        });
+
+        it('denies unauthorized user to {{ description }}', function () {
+            $user = {{ userClass }}::factory()->create();
+            $policy = new {{ className }}();
+
+            // Modify condition to test denial
+            expect($policy->{{ name }}($user))->toBeTrue();
+        })->todo();
+    });
+
+{{/each}}
+{{#each abilitiesWithModel}}
+    describe('{{ name }}', function () {
+        it('allows authorized user to {{ description }}', function () {
+            $user = {{ userClass }}::factory()->create();
+            ${{ modelVariable }} = {{ modelClass }}::factory()->create();
+            $policy = new {{ className }}();
+
+            expect($policy->{{ name }}($user, ${{ modelVariable }}))->toBeTrue();
+        });
+
+        it('denies unauthorized user to {{ description }}', function () {
+            $user = {{ userClass }}::factory()->create();
+            ${{ modelVariable }} = {{ modelClass }}::factory()->create();
+            $policy = new {{ className }}();
+
+            // Modify condition to test denial
+            expect($policy->{{ name }}($user, ${{ modelVariable }}))->toBeTrue();
+        })->todo();
+    });
+
+{{/each}}
+});

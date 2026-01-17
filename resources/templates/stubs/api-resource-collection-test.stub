@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Resources\{{ className }};
+use App\Http\Resources\{{ resourceClass }};
+use Illuminate\Http\Request;
+
+describe('{{ className }}', function () {
+    it('transforms collection to array', function () {
+        $models = collect([
+            (object) ['id' => 1],
+            (object) ['id' => 2],
+        ]);
+        $collection = new {{ className }}($models);
+        $request = Request::create('/');
+
+        $array = $collection->toArray($request);
+
+        expect($array)->toBeArray();
+        expect($array)->toHaveKey('data');
+        expect($array['data'])->toHaveCount(2);
+    });
+
+    it('uses correct resource class for items', function () {
+        $collection = new {{ className }}(collect());
+
+        expect($collection->collects)->toBe({{ resourceClass }}::class);
+    });
+});

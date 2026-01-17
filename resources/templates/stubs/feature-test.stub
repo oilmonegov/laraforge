@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+describe('{{ feature }}', function () {
+{{#each testCasesWithHttp}}
+    /**
+     * Acceptance Criteria: {{ id }}
+     * {{ label }}
+     */
+    it('{{ label }}', function () {
+        $response = $this->{{ httpMethod }}('{{ endpoint }}');
+
+        $response->assertStatus({{ statusCode }});
+    });
+
+{{/each}}
+{{#each testCasesWithoutHttp}}
+    /**
+     * Acceptance Criteria: {{ id }}
+     * {{ label }}
+     */
+    it('{{ label }}', function () {
+{{#each assertions}}
+        // Assert: {{ this }}
+{{/each}}
+
+        $this->markTestIncomplete('Implement this test');
+    });
+
+{{/each}}
+{{#if emptyPlaceholder}}
+    it('should pass basic test', function () {
+        expect(true)->toBeTrue();
+    });
+{{/if}}
+});

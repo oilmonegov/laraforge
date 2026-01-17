@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Policies;
+
+use App\Models\{{ modelClass }};
+use App\Models\{{ userClass }};
+
+class {{ className }}
+{
+{{#each abilitiesNoModel}}
+    /**
+     * Determine whether the user can {{ description }}.
+     */
+    public function {{ name }}({{ userClass }} $user): bool
+    {
+        return true;
+    }
+
+{{/each}}
+{{#each abilitiesWithModel}}
+    /**
+     * Determine whether the user can {{ description }}.
+     */
+    public function {{ name }}({{ userClass }} $user, {{ modelClass }} ${{ modelVariable }}): bool
+    {
+        return true;
+    }
+
+{{/each}}
+}

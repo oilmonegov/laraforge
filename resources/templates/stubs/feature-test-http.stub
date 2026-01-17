@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+describe('{{ feature }} HTTP Endpoints', function () {
+{{#each endpointsWithValidation}}
+    describe('{{ method }} {{ path }}', function () {
+        it('returns successful response', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus({{ successStatus }});
+        });
+
+        it('requires authentication', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus(401);
+        });
+
+        it('validates request data', function () {
+            $response = $this->{{ methodLower }}('{{ path }}', []);
+
+            $response->assertStatus(422);
+            $response->assertJsonValidationErrors([
+                // Add expected validation errors
+            ]);
+        });
+
+        it('returns expected JSON structure', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertJsonStructure([
+                'data' => [
+                    // Define expected structure
+                ],
+            ]);
+        });
+    });
+
+{{/each}}
+{{#each endpointsGetOnly}}
+    describe('{{ method }} {{ path }}', function () {
+        it('returns successful response', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus({{ successStatus }});
+        });
+
+        it('requires authentication', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus(401);
+        });
+
+        it('returns expected JSON structure', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertJsonStructure([
+                'data' => [
+                    // Define expected structure
+                ],
+            ]);
+        });
+    });
+
+{{/each}}
+{{#each endpointsDeleteOnly}}
+    describe('{{ method }} {{ path }}', function () {
+        it('returns successful response', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus({{ successStatus }});
+        });
+
+        it('requires authentication', function () {
+            $response = $this->{{ methodLower }}('{{ path }}');
+
+            $response->assertStatus(401);
+        });
+    });
+
+{{/each}}
+});

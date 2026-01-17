@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Resources\{{ className }};
+{{#if modelClass}}
+use App\Models\{{ modelClass }};
+{{/if}}
+use Illuminate\Http\Request;
+
+describe('{{ className }}', function () {
+    it('transforms resource to array', function () {
+        $model = (object) [{{ defaultData }}];
+        $resource = new {{ className }}($model);
+        $request = Request::create('/');
+
+        $array = $resource->toArray($request);
+
+        expect($array)->toBeArray();
+{{#each attributes}}
+        expect($array)->toHaveKey('{{ this }}');
+{{/each}}
+{{#if noAttributes}}
+        expect($array)->toHaveKey('id');
+{{/if}}
+    });
+{{#if hasAttributes}}
+
+    it('includes expected attributes', function () {
+        $model = (object) [
+{{#each attributes}}
+            '{{ this }}' => 'test-{{ this }}',
+{{/each}}
+        ];
+        $resource = new {{ className }}($model);
+        $request = Request::create('/');
+
+        $array = $resource->toArray($request);
+
+{{#each attributes}}
+        expect($array['{{ this }}'])->toBe('test-{{ this }}');
+{{/each}}
+    });
+{{/if}}
+});

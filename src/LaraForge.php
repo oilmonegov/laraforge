@@ -13,7 +13,10 @@ use LaraForge\Contracts\LaraForgeInterface;
 use LaraForge\Contracts\PluginInterface;
 use LaraForge\Contracts\TemplateEngineInterface;
 use LaraForge\Criteria\CriteriaLoader;
+use LaraForge\Generators\ApiResourceGenerator;
+use LaraForge\Generators\FeatureTestGenerator;
 use LaraForge\Generators\GitHooksGenerator;
+use LaraForge\Generators\PolicyGenerator;
 use LaraForge\Templates\TemplateEngine;
 
 final class LaraForge implements LaraForgeInterface
@@ -77,6 +80,9 @@ final class LaraForge implements LaraForgeInterface
     private function registerCoreGenerators(): void
     {
         $this->registerGenerator('git-hooks', new GitHooksGenerator($this));
+        $this->registerGenerator('api-resource', new ApiResourceGenerator($this));
+        $this->registerGenerator('feature-test', new FeatureTestGenerator($this));
+        $this->registerGenerator('policy', new PolicyGenerator($this));
     }
 
     private function loadProjectConfig(): void

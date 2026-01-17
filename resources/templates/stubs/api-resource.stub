@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+{{#if openapi}}
+
+/**
+ * @OA\Schema(
+ *     schema="{{ className }}",
+ *     type="object",
+{{#each attributes}}
+ *     @OA\Property(property="{{ this }}", type="string"),
+{{/each}}
+ * )
+ */
+{{/if}}
+class {{ className }} extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+{{#each attributes}}
+            '{{ this }}' => $this->{{ this }},
+{{/each}}
+{{#if noAttributes}}
+            'id' => $this->id,
+{{/if}}
+        ];
+    }
+}
