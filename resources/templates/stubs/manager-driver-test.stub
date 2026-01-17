@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Services\{{ serviceName }}\Contracts\{{ interfaceName }};
+use App\Services\{{ serviceName }}\Drivers\{{ driverName }}Driver;
+{{#if useSaloon}}
+use App\Services\{{ serviceName }}\Connectors\{{ driverName }}Connector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+{{/if}}
+
+describe('{{ driverName }}Driver', function () {
+    it('implements the {{ interfaceName }} contract', function () {
+        $driver = new {{ driverName }}Driver([
+            'api_key' => 'test-key',
+        ]);
+
+        expect($driver)->toBeInstanceOf({{ interfaceName }}::class);
+    });
+
+    it('accepts configuration array', function () {
+        $config = [
+            'api_key' => 'my-api-key',
+            'base_url' => 'https://api.example.com',
+        ];
+
+        $driver = new {{ driverName }}Driver($config);
+
+        expect($driver)->toBeInstanceOf({{ driverName }}Driver::class);
+    });
+{{#if useSaloon}}
+
+    it('provides access to the Saloon connector', function () {
+        $driver = new {{ driverName }}Driver([
+            'api_key' => 'test-key',
+        ]);
+
+        expect($driver->connector())->toBeInstanceOf({{ driverName }}Connector::class);
+    });
+{{/if}}
+{{#each methods}}
+
+    it('{{ name }} method exists', function () {
+        $driver = new {{ driverName }}Driver([]);
+
+        expect(method_exists($driver, '{{ name }}'))->toBeTrue();
+    });
+{{/each}}
+});

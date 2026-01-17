@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\{{ serviceName }}\Connectors;
+
+use Saloon\Http\Connector;
+use Saloon\Traits\Plugins\AcceptsJson;
+
+class {{ driverName }}Connector extends Connector
+{
+    use AcceptsJson;
+
+    public function __construct(
+        protected readonly string $apiKey,
+        protected readonly ?string $baseUrl = null,
+    ) {}
+
+    /**
+     * The base URL for the API.
+     */
+    public function resolveBaseUrl(): string
+    {
+        return $this->baseUrl ?? '{{ baseUrl }}';
+    }
+
+    /**
+     * Default headers for every request.
+     *
+     * @return array<string, string>
+     */
+    protected function defaultHeaders(): array
+    {
+        return [
+            'Authorization' => 'Bearer ' . $this->apiKey,
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+    }
+
+    /**
+     * Default config for every request.
+     *
+     * @return array<string, mixed>
+     */
+    protected function defaultConfig(): array
+    {
+        return [
+            'timeout' => 30,
+        ];
+    }
+}

@@ -16,6 +16,7 @@ use LaraForge\Criteria\CriteriaLoader;
 use LaraForge\Generators\ApiResourceGenerator;
 use LaraForge\Generators\FeatureTestGenerator;
 use LaraForge\Generators\GitHooksGenerator;
+use LaraForge\Generators\ManagerGenerator;
 use LaraForge\Generators\PolicyGenerator;
 use LaraForge\Templates\TemplateEngine;
 
@@ -83,6 +84,7 @@ final class LaraForge implements LaraForgeInterface
         $this->registerGenerator('api-resource', new ApiResourceGenerator($this));
         $this->registerGenerator('feature-test', new FeatureTestGenerator($this));
         $this->registerGenerator('policy', new PolicyGenerator($this));
+        $this->registerGenerator('manager', new ManagerGenerator($this));
     }
 
     private function loadProjectConfig(): void

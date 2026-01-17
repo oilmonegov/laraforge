@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\{{ serviceName }}\Drivers;
+
+use App\Services\{{ serviceName }}\Contracts\{{ interfaceName }};
+use App\Services\{{ serviceName }}\Connectors\{{ driverName }}Connector;
+
+class {{ driverName }}Driver implements {{ interfaceName }}
+{
+    protected {{ driverName }}Connector $connector;
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function __construct(
+        protected readonly array $config = [],
+    ) {
+        $this->connector = new {{ driverName }}Connector(
+            apiKey: $this->config('api_key', ''),
+            baseUrl: $this->config('base_url'),
+        );
+    }
+
+    /**
+     * Get a configuration value.
+     */
+    protected function config(string $key, mixed $default = null): mixed
+    {
+        return $this->config[$key] ?? $default;
+    }
+
+    /**
+     * Get the Saloon connector instance.
+     */
+    public function connector(): {{ driverName }}Connector
+    {
+        return $this->connector;
+    }
+{{#each methods}}
+
+    /**
+     * {{ description }}
+     *
+     * @param mixed ...$args
+     * @return mixed
+     */
+    public function {{ name }}(...$args): mixed
+    {
+        // TODO: Implement {{ name }}() using Saloon requests
+        // Example:
+        // $response = $this->connector->send(new {{ name }}Request(...$args));
+        // return $response->dto();
+
+        throw new \RuntimeException('Method {{ name }}() not implemented.');
+    }
+{{/each}}
+}

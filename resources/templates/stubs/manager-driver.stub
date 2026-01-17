@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\{{ serviceName }}\Drivers;
+
+use App\Services\{{ serviceName }}\Contracts\{{ interfaceName }};
+
+class {{ driverName }}Driver implements {{ interfaceName }}
+{
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function __construct(
+        protected readonly array $config = [],
+    ) {}
+
+    /**
+     * Get a configuration value.
+     */
+    protected function config(string $key, mixed $default = null): mixed
+    {
+        return $this->config[$key] ?? $default;
+    }
+{{#each methods}}
+
+    /**
+     * {{ description }}
+     *
+     * @param mixed ...$args
+     * @return mixed
+     */
+    public function {{ name }}(...$args): mixed
+    {
+        // TODO: Implement {{ name }}() method
+        throw new \RuntimeException('Method {{ name }}() not implemented.');
+    }
+{{/each}}
+}

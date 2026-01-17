@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Services\{{ serviceName }}\{{ className }};
+use App\Services\{{ serviceName }}\Contracts\{{ interfaceName }};
+{{#each drivers}}
+use App\Services\{{ serviceName }}\Drivers\{{ name }}Driver;
+{{/each}}
+use Illuminate\Foundation\Application;
+
+describe('{{ className }}', function () {
+    it('implements the {{ interfaceName }} contract', function () {
+        $app = $this->createMockApp();
+        $manager = new {{ className }}($app);
+
+        expect($manager)->toBeInstanceOf({{ interfaceName }}::class);
+    });
+
+    it('returns the default driver from config', function () {
+        $app = $this->createMockApp([
+            'services.{{ configKey }}.driver' => '{{ defaultDriver }}',
+        ]);
+        $manager = new {{ className }}($app);
+
+        expect($manager->getDefaultDriver())->toBe('{{ defaultDriver }}');
+    });
+{{#each drivers}}
+
+    it('creates {{ name }} driver', function () {
+        $app = $this->createMockApp([
+            'services.{{ configKey }}.drivers.{{ key }}' => [
+                'api_key' => 'test-key',
+            ],
+        ]);
+        $manager = new {{ className }}($app);
+
+        $driver = $manager->driver('{{ key }}');
+
+        expect($driver)->toBeInstanceOf({{ name }}Driver::class);
+    });
+{{/each}}
+{{#each methods}}
+
+    it('proxies {{ name }} calls to driver', function () {
+        $app = $this->createMockApp();
+        $manager = new {{ className }}($app);
+
+        // TODO: Mock the driver and test the proxy method
+        expect(true)->toBeTrue();
+    })->todo();
+{{/each}}
+});

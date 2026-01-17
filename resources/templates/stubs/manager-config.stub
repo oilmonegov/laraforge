@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Default {{ serviceName }} Driver
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default {{ serviceNameLower }} driver that will be used
+    | when an explicit driver is not specified.
+    |
+    */
+
+    'driver' => env('{{ envPrefix }}_DRIVER', '{{ defaultDriver }}'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | {{ serviceName }} Drivers
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure the driver settings for each {{ serviceNameLower }}
+    | integration that is used by your application.
+    |
+    */
+
+    'drivers' => [
+{{#each drivers}}
+        '{{ key }}' => [
+            'api_key' => env('{{ envKey }}_API_KEY'),
+            'base_url' => env('{{ envKey }}_BASE_URL'),
+        ],
+
+{{/each}}
+    ],
+];

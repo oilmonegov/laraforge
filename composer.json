@@ -26,9 +26,14 @@
         "symfony/yaml": "^7.0"
     },
     "require-dev": {
-        "pestphp/pest": "^3.0",
+        "infection/infection": "^0.29",
+        "laravel/pint": "^1.18",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-browser": "^4.0",
+        "pestphp/pest-plugin-stressless": "^4.0",
         "phpstan/phpstan": "^2.0",
-        "laravel/pint": "^1.18"
+        "rector/rector": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -46,15 +51,33 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "infection/extension-installer": true
         }
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "test": "pest",
+        "test:unit": "pest --testsuite=Unit",
+        "test:feature": "pest --testsuite=Feature",
+        "test:arch": "pest --testsuite=Arch",
+        "test:property": "pest --testsuite=Property",
+        "test:stress": "pest --testsuite=Stress",
+        "test:browser": "pest --testsuite=Browser",
+        "test:coverage": "pest --coverage --min=80",
+        "test:all": "pest --testsuite=Unit,Feature,Arch,Property,Stress",
+        "mutate": "infection --min-msi=70 --min-covered-msi=80 --threads=4",
+        "refactor": "rector process",
+        "refactor:dry": "rector process --dry-run",
         "lint": "pint",
-        "analyse": "phpstan analyse"
+        "lint:fix": "pint",
+        "analyse": "phpstan analyse",
+        "ci": [
+            "@lint",
+            "@analyse",
+            "@test:all"
+        ]
     },
     "extra": {
         "branch-alias": {

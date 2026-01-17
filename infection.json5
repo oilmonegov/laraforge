@@ -1,0 +1,65 @@
+{
+    "$schema": "https://raw.githubusercontent.com/infection/infection/master/resources/schema.json",
+
+    // Source code configuration
+    "source": {
+        "directories": ["src"],
+        "excludes": [
+            "Commands",
+            "ComposerScripts.php"
+        ]
+    },
+
+    // Timeout for each mutation test
+    "timeout": 10,
+
+    // Mutation testing thresholds
+    "minMsi": 70,
+    "minCoveredMsi": 80,
+
+    // Number of parallel threads
+    "threads": 4,
+
+    // Test framework
+    "testFramework": "pest",
+    "testFrameworkOptions": "--testsuite=Unit",
+
+    // Logging configuration
+    "logs": {
+        "text": "infection.log",
+        "html": "infection.html",
+        "summary": "infection-summary.log",
+        "perMutator": "infection-per-mutator.md"
+    },
+
+    // Mutators to use (all by default, but you can customize)
+    "mutators": {
+        "@default": true,
+
+        // Disable noisy mutators that often produce equivalent mutations
+        "Concat": false,
+        "ConcatOperandRemoval": false,
+
+        // Customize specific mutators
+        "TrueValue": {
+            "ignoreSourceCodeByRegex": [
+                ".*return true;.*// @infection-ignore"
+            ]
+        }
+    },
+
+    // Only mutate covered code (faster, more meaningful results)
+    "onlyCovered": true,
+
+    // Initial test run must pass
+    "initialTestsPhpOptions": "-d memory_limit=256M",
+
+    // Bootstrap file
+    "bootstrap": "vendor/autoload.php",
+
+    // PHPUnit configuration
+    "phpUnit": {
+        "configDir": ".",
+        "customPath": "vendor/bin/pest"
+    }
+}

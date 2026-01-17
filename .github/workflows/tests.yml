@@ -40,8 +40,45 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Run tests with coverage
-        run: ./vendor/bin/pest --colors=always --coverage --min=80
+      - name: Run unit tests with coverage
+        run: ./vendor/bin/pest --testsuite=Unit --colors=always --coverage --min=80
+
+      - name: Run property tests
+        run: ./vendor/bin/pest --testsuite=Property --colors=always
+
+      - name: Run stress tests (in-memory only)
+        run: ./vendor/bin/pest --testsuite=Stress --colors=always --filter="In-Memory"
+
+  architecture:
+    name: Architecture Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run architecture tests
+        run: ./vendor/bin/pest --testsuite=Arch --colors=always
 
   code-style:
     name: Code Style
@@ -104,3 +141,47 @@ jobs:
 
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyse --error-format=github
+
+  mutation:
+    name: Mutation Testing
+    runs-on: ubuntu-latest
+    # Only run on main branch pushes, not PRs (mutation tests are slow)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: xdebug
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run Infection
+        run: ./vendor/bin/infection --min-msi=70 --min-covered-msi=80 --threads=4
+        continue-on-error: true  # Don't fail the build on mutation testing
+
+      - name: Upload mutation report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-report
+          path: |
+            infection.log
+            infection.html
+            infection-summary.log

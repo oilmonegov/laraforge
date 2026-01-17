@@ -13,6 +13,9 @@ final class ConfigLoader implements ConfigLoaderInterface
     /** @var array<string, mixed> */
     private array $config = [];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function load(string $path): array
     {
         if (! file_exists($path)) {
@@ -29,6 +32,9 @@ final class ConfigLoader implements ConfigLoaderInterface
         };
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function loadYaml(string $path): array
     {
         $content = file_get_contents($path);
@@ -38,9 +44,13 @@ final class ConfigLoader implements ConfigLoaderInterface
 
         $parsed = Yaml::parse($content);
 
+        /** @var array<string, mixed> */
         return is_array($parsed) ? $parsed : [];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function loadJson(string $path): array
     {
         $content = file_get_contents($path);
@@ -54,13 +64,18 @@ final class ConfigLoader implements ConfigLoaderInterface
             throw new ConfigurationException("Invalid JSON in configuration file: {$path}");
         }
 
+        /** @var array<string, mixed> */
         return is_array($parsed) ? $parsed : [];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function loadPhp(string $path): array
     {
         $parsed = require $path;
 
+        /** @var array<string, mixed> */
         return is_array($parsed) ? $parsed : [];
     }
 
@@ -130,7 +145,11 @@ final class ConfigLoader implements ConfigLoaderInterface
     {
         foreach ($override as $key => $value) {
             if (is_array($value) && isset($base[$key]) && is_array($base[$key])) {
-                $base[$key] = $this->mergeRecursive($base[$key], $value);
+                /** @var array<string, mixed> $baseValue */
+                $baseValue = $base[$key];
+                /** @var array<string, mixed> $overrideValue */
+                $overrideValue = $value;
+                $base[$key] = $this->mergeRecursive($baseValue, $overrideValue);
             } else {
                 $base[$key] = $value;
             }

@@ -1,0 +1,270 @@
+# Product Requirements Document (PRD)
+
+**Project:** {{ projectName }}
+**Feature:** {{ title }}
+**Version:** {{ version }}
+**Status:** {{ status }}
+**Author:** {{ author }}
+**Created:** {{ createdAt }}
+**Last Updated:** {{ updatedAt }}
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Overview
+{{ overview }}
+
+### 1.2 Problem Statement
+{{ problemStatement }}
+
+### 1.3 Business Justification
+{{ businessJustification }}
+
+---
+
+## 2. Stakeholders
+
+### 2.1 Primary Stakeholders
+{{#each stakeholders.primary}}
+- **{{ name }}** ({{ role }}): {{ interest }}
+{{/each}}
+
+### 2.2 Secondary Stakeholders
+{{#each stakeholders.secondary}}
+- **{{ name }}** ({{ role }}): {{ interest }}
+{{/each}}
+
+---
+
+## 3. Target Audience
+
+### 3.1 User Personas
+{{#each personas}}
+#### {{ name }}
+- **Role:** {{ role }}
+- **Goals:** {{ goals }}
+- **Pain Points:** {{ painPoints }}
+- **Technical Proficiency:** {{ technicalLevel }}
+{{/each}}
+
+### 3.2 Use Cases
+{{#each useCases}}
+#### UC-{{ @index }}: {{ title }}
+- **Actor:** {{ actor }}
+- **Precondition:** {{ precondition }}
+- **Main Flow:**
+{{#each steps}}
+  {{ @index }}. {{ this }}
+{{/each}}
+- **Postcondition:** {{ postcondition }}
+- **Exceptions:**
+{{#each exceptions}}
+  - {{ this }}
+{{/each}}
+{{/each}}
+
+---
+
+## 4. Objectives & Key Results (OKRs)
+
+### 4.1 Objectives
+{{#each objectives}}
+#### O{{ @index }}: {{ description }}
+- **Priority:** {{ priority }}
+- **Rationale:** {{ rationale }}
+- **Key Results:**
+{{#each keyResults}}
+  - KR{{ @index }}: {{ this }}
+{{/each}}
+{{/each}}
+
+### 4.2 Success Metrics
+| Metric | Current | Target | Measurement Method |
+|--------|---------|--------|-------------------|
+{{#each successMetrics}}
+| {{ name }} | {{ current }} | {{ target }} | {{ method }} |
+{{/each}}
+
+---
+
+## 5. Requirements
+
+### 5.1 Functional Requirements
+
+#### 5.1.1 Core Features
+{{#each requirements.functional.core}}
+##### FR-{{ id }}: {{ title }}
+- **Description:** {{ description }}
+- **Priority:** {{ priority }}
+- **User Story:** {{ userStory }}
+- **Acceptance Criteria:**
+{{#each acceptanceCriteria}}
+  - [ ] {{ this }}
+{{/each}}
+{{/each}}
+
+#### 5.1.2 Secondary Features
+{{#each requirements.functional.secondary}}
+##### FR-{{ id }}: {{ title }}
+- **Description:** {{ description }}
+- **Priority:** {{ priority }}
+- **Dependencies:** {{ dependencies }}
+{{/each}}
+
+### 5.2 Non-Functional Requirements
+
+#### 5.2.1 Performance
+{{#each requirements.nonFunctional.performance}}
+- **NFR-P{{ @index }}:** {{ description }}
+  - Metric: {{ metric }}
+  - Target: {{ target }}
+{{/each}}
+
+#### 5.2.2 Security
+{{#each requirements.nonFunctional.security}}
+- **NFR-S{{ @index }}:** {{ description }}
+  - Compliance: {{ compliance }}
+  - Implementation: {{ implementation }}
+{{/each}}
+
+#### 5.2.3 Scalability
+{{#each requirements.nonFunctional.scalability}}
+- **NFR-SC{{ @index }}:** {{ description }}
+  - Current Capacity: {{ currentCapacity }}
+  - Target Capacity: {{ targetCapacity }}
+{{/each}}
+
+#### 5.2.4 Accessibility
+{{#each requirements.nonFunctional.accessibility}}
+- **NFR-A{{ @index }}:** {{ description }}
+  - Standard: {{ standard }}
+  - Level: {{ level }}
+{{/each}}
+
+---
+
+## 6. User Stories
+
+### 6.1 Epic: {{ epicTitle }}
+{{#each userStories}}
+#### US-{{ id }}: {{ title }}
+- **As a** {{ persona }}
+- **I want** {{ want }}
+- **So that** {{ benefit }}
+- **Priority:** {{ priority }}
+- **Story Points:** {{ storyPoints }}
+- **Acceptance Criteria:**
+{{#each acceptanceCriteria}}
+  - [ ] {{ this }}
+{{/each}}
+{{/each}}
+
+---
+
+## 7. Technical Considerations
+
+### 7.1 Technology Stack
+| Layer | Technology | Version | Justification |
+|-------|------------|---------|---------------|
+{{#each technologyStack}}
+| {{ layer }} | {{ technology }} | {{ version }} | {{ justification }} |
+{{/each}}
+
+### 7.2 Integration Points
+{{#each integrations}}
+#### {{ name }}
+- **Type:** {{ type }}
+- **Protocol:** {{ protocol }}
+- **Authentication:** {{ authentication }}
+- **Data Format:** {{ dataFormat }}
+{{/each}}
+
+### 7.3 Data Requirements
+{{#each dataRequirements}}
+#### {{ entity }}
+- **Storage:** {{ storage }}
+- **Retention:** {{ retention }}
+- **Encryption:** {{ encryption }}
+{{/each}}
+
+---
+
+## 8. Constraints & Assumptions
+
+### 8.1 Constraints
+{{#each constraints}}
+- **C{{ @index }}:** {{ description }}
+  - Type: {{ type }}
+  - Impact: {{ impact }}
+{{/each}}
+
+### 8.2 Assumptions
+{{#each assumptions}}
+- **A{{ @index }}:** {{ description }}
+  - Risk if Invalid: {{ risk }}
+{{/each}}
+
+### 8.3 Dependencies
+{{#each dependencies}}
+- **D{{ @index }}:** {{ description }}
+  - Owner: {{ owner }}
+  - Status: {{ status }}
+{{/each}}
+
+---
+
+## 9. Out of Scope
+
+{{#each outOfScope}}
+- {{ this }}
+{{/each}}
+
+---
+
+## 10. Risks & Mitigation
+
+| Risk ID | Description | Probability | Impact | Mitigation Strategy |
+|---------|-------------|-------------|--------|---------------------|
+{{#each risks}}
+| R{{ @index }} | {{ description }} | {{ probability }} | {{ impact }} | {{ mitigation }} |
+{{/each}}
+
+---
+
+## 11. Timeline & Milestones
+
+### 11.1 Phases
+{{#each phases}}
+#### Phase {{ @index }}: {{ name }}
+- **Duration:** {{ duration }}
+- **Deliverables:**
+{{#each deliverables}}
+  - {{ this }}
+{{/each}}
+{{/each}}
+
+### 11.2 Milestones
+| Milestone | Target Date | Criteria |
+|-----------|-------------|----------|
+{{#each milestones}}
+| {{ name }} | {{ targetDate }} | {{ criteria }} |
+{{/each}}
+
+---
+
+## 12. Appendix
+
+### 12.1 Glossary
+{{#each glossary}}
+- **{{ term }}:** {{ definition }}
+{{/each}}
+
+### 12.2 References
+{{#each references}}
+- {{ this }}
+{{/each}}
+
+---
+
+*Generated by LaraForge - Version-Aware Development Orchestrator*

@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\{{ serviceName }};
+
+use Illuminate\Support\Manager;
+use App\Services\{{ serviceName }}\Contracts\{{ interfaceName }};
+{{#each drivers}}
+use App\Services\{{ serviceName }}\Drivers\{{ name }}Driver;
+{{/each}}
+
+class {{ className }} extends Manager implements {{ interfaceName }}
+{
+    /**
+     * Get the default driver name.
+     */
+    public function getDefaultDriver(): string
+    {
+        return $this->config->get('services.{{ configKey }}.driver', '{{ defaultDriver }}');
+    }
+{{#each drivers}}
+
+    /**
+     * Create the {{ name }} driver instance.
+     */
+    public function create{{ name }}Driver(): {{ name }}Driver
+    {
+        $config = $this->config->get('services.{{ configKey }}.drivers.{{ key }}', []);
+
+        return new {{ name }}Driver($config);
+    }
+{{/each}}
+{{#each methods}}
+
+    /**
+     * {{ description }}
+     *
+     * @param mixed ...$args
+     * @return mixed
+     */
+    public function {{ name }}(...$args): mixed
+    {
+        return $this->driver()->{{ name }}(...$args);
+    }
+{{/each}}
+}

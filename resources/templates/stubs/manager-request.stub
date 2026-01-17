@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\{{ serviceName }}\Requests;
+
+use Saloon\Enums\Method;
+use Saloon\Http\Request;
+
+class {{ requestName }}Request extends Request
+{
+    protected Method $method = Method::{{ httpMethod }};
+
+    public function __construct(
+{{#each parameters}}
+        {{ visibility }} readonly {{ type }} ${{ name }},
+{{/each}}
+    ) {}
+
+    /**
+     * The endpoint for the request.
+     */
+    public function resolveEndpoint(): string
+    {
+        return '{{ endpoint }}';
+    }
+{{#if hasBody}}
+
+    /**
+     * The request body.
+     *
+     * @return array<string, mixed>
+     */
+    protected function defaultBody(): array
+    {
+        return [
+{{#each bodyFields}}
+            '{{ name }}' => $this->{{ name }},
+{{/each}}
+        ];
+    }
+{{/if}}
+{{#if hasQuery}}
+
+    /**
+     * The query parameters.
+     *
+     * @return array<string, mixed>
+     */
+    protected function defaultQuery(): array
+    {
+        return [
+{{#each queryFields}}
+            '{{ name }}' => $this->{{ name }},
+{{/each}}
+        ];
+    }
+{{/if}}
+}
