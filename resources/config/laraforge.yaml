@@ -7,12 +7,45 @@ laraforge:
 defaults:
   php_version: "8.4"
   strict_types: true
-  
+
 templates:
   engine: "simple"  # simple, blade, twig
-  
+
 overrides:
   directory: ".laraforge"
-  
+
 generators:
   enabled: true
+
+# Git Hooks Configuration
+hooks:
+  directory: ".githooks"
+  auto_install: false  # Set to true to auto-install hooks on composer install/update
+  enabled:             # Hooks to install when auto_install is true
+    - pre-commit
+    - commit-msg
+
+  # Pre-commit hook settings
+  pre-commit:
+    lint: true       # Run code style checks (Pint/PHP-CS-Fixer)
+    analyse: true    # Run static analysis (PHPStan)
+    test: false      # Run tests (slower, optional)
+
+  # Commit message hook settings
+  commit-msg:
+    conventional: true  # Enforce conventional commits format
+
+  # Pre-push hook settings
+  pre-push:
+    test: true       # Run full test suite
+    build: false     # Run asset build
+
+  # Post-merge hook settings
+  post-merge:
+    composer: true   # Auto-run composer install on lock changes
+    npm: true        # Auto-run npm install on lock changes
+
+  # Post-checkout hook settings
+  post-checkout:
+    composer: true   # Auto-run composer install on lock changes
+    npm: true        # Auto-run npm install on lock changes

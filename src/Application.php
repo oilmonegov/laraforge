@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaraForge;
 
 use LaraForge\Commands\GenerateCommand;
+use LaraForge\Commands\HooksInstallCommand;
 use LaraForge\Commands\InitCommand;
 use LaraForge\Commands\ListGeneratorsCommand;
 use LaraForge\Commands\VersionCommand;
@@ -36,6 +37,7 @@ final class Application extends ConsoleApplication
         $this->add(new GenerateCommand($this->laraforge));
         $this->add(new ListGeneratorsCommand($this->laraforge));
         $this->add(new VersionCommand($this->laraforge));
+        $this->add(new HooksInstallCommand($this->laraforge));
 
         // Register adapter commands
         foreach ($this->laraforge->adapters() as $adapter) {

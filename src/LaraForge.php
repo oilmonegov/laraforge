@@ -11,6 +11,7 @@ use LaraForge\Contracts\GeneratorInterface;
 use LaraForge\Contracts\LaraForgeInterface;
 use LaraForge\Contracts\PluginInterface;
 use LaraForge\Contracts\TemplateEngineInterface;
+use LaraForge\Generators\GitHooksGenerator;
 use LaraForge\Templates\TemplateEngine;
 
 final class LaraForge implements LaraForgeInterface
@@ -63,6 +64,14 @@ final class LaraForge implements LaraForgeInterface
 
         // Load project configuration
         $this->loadProjectConfig();
+
+        // Register core generators
+        $this->registerCoreGenerators();
+    }
+
+    private function registerCoreGenerators(): void
+    {
+        $this->registerGenerator('git-hooks', new GitHooksGenerator($this));
     }
 
     private function loadProjectConfig(): void

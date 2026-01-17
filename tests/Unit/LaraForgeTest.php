@@ -69,10 +69,11 @@ describe('LaraForge', function () {
         expect($laraforge->plugins())->toBeEmpty();
     });
 
-    it('starts with no generators', function () {
+    it('registers core generators on initialization', function () {
         $laraforge = laraforge();
 
-        expect($laraforge->generators())->toBeEmpty();
+        expect($laraforge->generators())->not->toBeEmpty();
+        expect($laraforge->generator('git-hooks'))->not->toBeNull();
     });
 
     it('returns null for non-existent generator', function () {

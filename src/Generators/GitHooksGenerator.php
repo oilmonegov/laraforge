@@ -1,0 +1,474 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaraForge\Generators;
+
+use LaraForge\Support\Generator;
+
+final class GitHooksGenerator extends Generator
+{
+    public const AVAILABLE_HOOKS = [
+        'pre-commit' => 'Runs before a commit is created (code style, tests)',
+        'commit-msg' => 'Validates commit message format',
+        'pre-push' => 'Runs before pushing to remote (tests, build)',
+        'post-merge' => 'Runs after a merge (dependency updates)',
+        'post-checkout' => 'Runs after checkout (environment setup)',
+    ];
+
+    public function identifier(): string
+    {
+        return 'git-hooks';
+    }
+
+    public function name(): string
+    {
+        return 'Git Hooks';
+    }
+
+    public function description(): string
+    {
+        return 'Generates git hooks for code quality enforcement';
+    }
+
+    public function options(): array
+    {
+        return [
+            'hooks' => [
+                'type' => 'array',
+                'description' => 'List of hooks to install (pre-commit, commit-msg, pre-push, post-merge, post-checkout)',
+                'required' => false,
+                'default' => ['pre-commit', 'commit-msg'],
+            ],
+            'directory' => [
+                'type' => 'string',
+                'description' => 'Directory to store hooks',
+                'required' => false,
+                'default' => '.githooks',
+            ],
+            'configure_git' => [
+                'type' => 'boolean',
+                'description' => 'Configure git to use the hooks directory',
+                'required' => false,
+                'default' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $options
+     * @return array<string>
+     */
+    public function generate(array $options = []): array
+    {
+        $hooks = $options['hooks'] ?? ['pre-commit', 'commit-msg'];
+        $directory = $options['directory'] ?? '.githooks';
+        $configureGit = $options['configure_git'] ?? true;
+
+        $generatedFiles = [];
+
+        // Get hook configuration from laraforge config
+        $hookConfig = $this->getHookConfig();
+
+        foreach ($hooks as $hook) {
+            if (! isset(self::AVAILABLE_HOOKS[$hook])) {
+                continue;
+            }
+
+            $content = $this->generateHookContent($hook, $hookConfig);
+            $hookPath = "{$directory}/{$hook}";
+            $fullPath = $this->writeFile($hookPath, $content);
+
+            // Make hook executable
+            chmod($fullPath, 0755);
+
+            $generatedFiles[] = $fullPath;
+        }
+
+        // Generate setup script
+        $setupContent = $this->generateSetupScript($directory);
+        $setupPath = $this->writeFile("{$directory}/setup.sh", $setupContent);
+        chmod($setupPath, 0755);
+        $generatedFiles[] = $setupPath;
+
+        // Configure git if requested
+        if ($configureGit) {
+            $this->configureGitHooksPath($directory);
+        }
+
+        return $generatedFiles;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getHookConfig(): array
+    {
+        return $this->laraforge->config()->get('hooks', [
+            'pre-commit' => [
+                'lint' => true,
+                'analyse' => true,
+                'test' => false,
+            ],
+            'commit-msg' => [
+                'conventional' => true,
+            ],
+            'pre-push' => [
+                'test' => true,
+                'build' => false,
+            ],
+        ]);
+    }
+
+    private function generateHookContent(string $hook, array $config): string
+    {
+        $hookConfig = $config[$hook] ?? [];
+
+        $templateFile = "hooks/{$hook}.stub";
+        if ($this->laraforge->templates()->exists($templateFile)) {
+            return $this->laraforge->templates()->renderFile($templateFile, [
+                'config' => $hookConfig,
+                'projectName' => $this->laraforge->config()->get('project.name', 'Project'),
+            ]);
+        }
+
+        // Fallback to built-in templates
+        return match ($hook) {
+            'pre-commit' => $this->generatePreCommitHook($hookConfig),
+            'commit-msg' => $this->generateCommitMsgHook($hookConfig),
+            'pre-push' => $this->generatePrePushHook($hookConfig),
+            'post-merge' => $this->generatePostMergeHook($hookConfig),
+            'post-checkout' => $this->generatePostCheckoutHook($hookConfig),
+            default => "#!/bin/bash\n# {$hook} hook\nexit 0\n",
+        };
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function generatePreCommitHook(array $config): string
+    {
+        $lint = $config['lint'] ?? true;
+        $analyse = $config['analyse'] ?? true;
+        $test = $config['test'] ?? false;
+
+        $script = <<<'BASH'
+#!/bin/bash
+
+# Pre-commit hook - Runs code quality checks before commits
+# Generated by LaraForge
+
+set -e
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.php$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "No PHP files staged for commit."
+    exit 0
+fi
+
+echo "Running pre-commit checks..."
+
+# Check if vendor directory exists
+if [ ! -d "vendor" ]; then
+    echo "Error: vendor directory not found. Run 'composer install' first."
+    exit 1
+fi
+
+BASH;
+
+        if ($lint) {
+            $script .= <<<'BASH'
+
+# Run code style check
+if [ -f "vendor/bin/pint" ]; then
+    echo "Checking code style with Pint..."
+    ./vendor/bin/pint --test $STAGED_FILES
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Code style issues found. Run './vendor/bin/pint' to fix them."
+        exit 1
+    fi
+elif [ -f "vendor/bin/php-cs-fixer" ]; then
+    echo "Checking code style with PHP-CS-Fixer..."
+    ./vendor/bin/php-cs-fixer fix --dry-run --diff $STAGED_FILES
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Code style issues found. Run './vendor/bin/php-cs-fixer fix' to fix them."
+        exit 1
+    fi
+fi
+
+BASH;
+        }
+
+        if ($analyse) {
+            $script .= <<<'BASH'
+
+# Run static analysis (only on src/ files)
+SRC_FILES=$(echo "$STAGED_FILES" | grep -E '^src/' || true)
+if [ -n "$SRC_FILES" ] && [ -f "vendor/bin/phpstan" ]; then
+    echo "Running static analysis with PHPStan..."
+    ./vendor/bin/phpstan analyse --no-progress $SRC_FILES
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Static analysis errors found. Please fix them before committing."
+        exit 1
+    fi
+fi
+
+BASH;
+        }
+
+        if ($test) {
+            $script .= <<<'BASH'
+
+# Run tests
+if [ -f "vendor/bin/pest" ]; then
+    echo "Running tests with Pest..."
+    ./vendor/bin/pest --bail
+elif [ -f "vendor/bin/phpunit" ]; then
+    echo "Running tests with PHPUnit..."
+    ./vendor/bin/phpunit --stop-on-failure
+fi
+
+BASH;
+        }
+
+        $script .= <<<'BASH'
+
+echo "All pre-commit checks passed!"
+exit 0
+BASH;
+
+        return $script;
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function generateCommitMsgHook(array $config): string
+    {
+        $conventional = $config['conventional'] ?? true;
+
+        if (! $conventional) {
+            return <<<'BASH'
+#!/bin/bash
+# Commit message hook - Generated by LaraForge
+exit 0
+BASH;
+        }
+
+        return <<<'BASH'
+#!/bin/bash
+
+# Commit message hook - Validates conventional commit format
+# Generated by LaraForge
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Conventional commit pattern
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,}"
+
+# Allow merge commits
+if [[ "$commit_msg" =~ ^Merge ]]; then
+    exit 0
+fi
+
+# Allow revert commits
+if [[ "$commit_msg" =~ ^Revert ]]; then
+    exit 0
+fi
+
+if ! [[ "$commit_msg" =~ $pattern ]]; then
+    echo ""
+    echo "Invalid commit message format!"
+    echo ""
+    echo "Commit messages must follow Conventional Commits format:"
+    echo "  <type>(<scope>): <description>"
+    echo ""
+    echo "Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo ""
+    echo "Examples:"
+    echo "  feat(auth): add OAuth2 support"
+    echo "  fix: resolve config loading issue"
+    echo "  docs: update installation guide"
+    echo ""
+    echo "Your message: $commit_msg"
+    echo ""
+    exit 1
+fi
+
+exit 0
+BASH;
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function generatePrePushHook(array $config): string
+    {
+        $test = $config['test'] ?? true;
+        $build = $config['build'] ?? false;
+
+        $script = <<<'BASH'
+#!/bin/bash
+
+# Pre-push hook - Runs checks before pushing
+# Generated by LaraForge
+
+set -e
+
+echo "Running pre-push checks..."
+
+BASH;
+
+        if ($test) {
+            $script .= <<<'BASH'
+
+# Run full test suite
+if [ -f "vendor/bin/pest" ]; then
+    echo "Running tests with Pest..."
+    ./vendor/bin/pest
+elif [ -f "vendor/bin/phpunit" ]; then
+    echo "Running tests with PHPUnit..."
+    ./vendor/bin/phpunit
+fi
+
+BASH;
+        }
+
+        if ($build) {
+            $script .= <<<'BASH'
+
+# Run build
+if [ -f "package.json" ]; then
+    if command -v npm &> /dev/null; then
+        echo "Building assets..."
+        npm run build
+    fi
+fi
+
+BASH;
+        }
+
+        $script .= <<<'BASH'
+
+echo "All pre-push checks passed!"
+exit 0
+BASH;
+
+        return $script;
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function generatePostMergeHook(array $config): string
+    {
+        return <<<'BASH'
+#!/bin/bash
+
+# Post-merge hook - Runs after merging
+# Generated by LaraForge
+
+echo "Running post-merge tasks..."
+
+# Check if composer.lock changed
+CHANGED_FILES=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)
+
+if echo "$CHANGED_FILES" | grep -q "composer.lock"; then
+    echo "composer.lock changed, running composer install..."
+    composer install --no-interaction
+fi
+
+if echo "$CHANGED_FILES" | grep -q "package-lock.json"; then
+    echo "package-lock.json changed, running npm install..."
+    npm install
+fi
+
+if echo "$CHANGED_FILES" | grep -q "yarn.lock"; then
+    echo "yarn.lock changed, running yarn install..."
+    yarn install
+fi
+
+echo "Post-merge tasks completed!"
+exit 0
+BASH;
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function generatePostCheckoutHook(array $config): string
+    {
+        return <<<'BASH'
+#!/bin/bash
+
+# Post-checkout hook - Runs after checkout
+# Generated by LaraForge
+
+# Only run on branch checkout, not file checkout
+if [ "$3" != "1" ]; then
+    exit 0
+fi
+
+echo "Running post-checkout tasks..."
+
+# Check if composer.lock differs
+if ! git diff --quiet HEAD@{1} HEAD -- composer.lock 2>/dev/null; then
+    echo "composer.lock changed, running composer install..."
+    composer install --no-interaction
+fi
+
+if ! git diff --quiet HEAD@{1} HEAD -- package-lock.json 2>/dev/null; then
+    echo "package-lock.json changed, running npm install..."
+    npm install
+fi
+
+echo "Post-checkout tasks completed!"
+exit 0
+BASH;
+    }
+
+    private function generateSetupScript(string $directory): string
+    {
+        return <<<BASH
+#!/bin/bash
+
+# Git Hooks Setup Script
+# Generated by LaraForge - Run this to configure git hooks
+
+SCRIPT_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+
+echo "Setting up git hooks..."
+
+# Configure git to use the hooks directory
+git config core.hooksPath {$directory}
+
+# Make all hooks executable
+for hook in "\$SCRIPT_DIR"/*; do
+    if [ -f "\$hook" ] && [ "\$(basename "\$hook")" != "setup.sh" ]; then
+        chmod +x "\$hook"
+    fi
+done
+
+echo "Git hooks configured successfully!"
+echo ""
+echo "Hooks are now active. To disable temporarily, use: git commit --no-verify"
+BASH;
+    }
+
+    private function configureGitHooksPath(string $directory): void
+    {
+        $workingDir = $this->laraforge->workingDirectory();
+
+        // Check if we're in a git repository
+        if (! is_dir($workingDir.'/.git')) {
+            return;
+        }
+
+        exec("cd {$workingDir} && git config core.hooksPath {$directory}");
+    }
+}

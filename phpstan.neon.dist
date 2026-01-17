@@ -4,6 +4,7 @@ parameters:
         - src
     excludePaths:
         - src/Commands
+        - src/ComposerScripts.php
     tmpDir: .phpstan.cache
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
