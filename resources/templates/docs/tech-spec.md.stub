@@ -1,0 +1,384 @@
+# Technical Specification Document
+
+**Project:** {{ projectName }}
+**Feature:** {{ title }}
+**Version:** {{ version }}
+**Status:** {{ status }}
+**Author:** {{ author }}
+**Created:** {{ createdAt }}
+**Last Updated:** {{ updatedAt }}
+
+---
+
+## 1. Document Overview
+
+### 1.1 Purpose
+{{ purpose }}
+
+### 1.2 Scope
+{{ scope }}
+
+### 1.3 References
+| Document | Version | Link |
+|----------|---------|------|
+{{#each references}}
+| {{ name }} | {{ version }} | {{ link }} |
+{{/each}}
+
+---
+
+## 2. System Architecture
+
+### 2.1 High-Level Architecture
+{{ architectureOverview }}
+
+### 2.2 Architecture Diagram
+```
+{{ architectureDiagram }}
+```
+
+### 2.3 Component Overview
+{{#each components}}
+#### {{ name }}
+- **Type:** {{ type }}
+- **Responsibility:** {{ responsibility }}
+- **Technology:** {{ technology }}
+- **Interfaces:**
+{{#each interfaces}}
+  - {{ name }}: {{ protocol }} - {{ description }}
+{{/each}}
+{{/each}}
+
+---
+
+## 3. Technology Stack
+
+### 3.1 Backend
+| Layer | Technology | Version | Justification |
+|-------|------------|---------|---------------|
+{{#each stack.backend}}
+| {{ layer }} | {{ technology }} | {{ version }} | {{ justification }} |
+{{/each}}
+
+### 3.2 Frontend
+| Layer | Technology | Version | Justification |
+|-------|------------|---------|---------------|
+{{#each stack.frontend}}
+| {{ layer }} | {{ technology }} | {{ version }} | {{ justification }} |
+{{/each}}
+
+### 3.3 Infrastructure
+| Component | Technology | Configuration |
+|-----------|------------|---------------|
+{{#each stack.infrastructure}}
+| {{ component }} | {{ technology }} | {{ configuration }} |
+{{/each}}
+
+### 3.4 Development Tools
+| Tool | Purpose | Version |
+|------|---------|---------|
+{{#each stack.devTools}}
+| {{ name }} | {{ purpose }} | {{ version }} |
+{{/each}}
+
+---
+
+## 4. Data Architecture
+
+### 4.1 Data Model
+{{#each dataModels}}
+#### {{ name }}
+```
+Table: {{ table }}
+{{#each columns}}
+  {{ name }}: {{ type }}{{ #if nullable }} NULL{{ /if }}{{ #if indexed }} [indexed]{{ /if }}
+{{/each}}
+```
+**Relationships:**
+{{#each relationships}}
+- {{ type }}: {{ target }} via {{ foreignKey }}
+{{/each}}
+{{/each}}
+
+### 4.2 Data Flow
+{{#each dataFlows}}
+1. **{{ name }}**
+   - Source: {{ source }}
+   - Destination: {{ destination }}
+   - Data: {{ data }}
+   - Frequency: {{ frequency }}
+   - Volume: {{ volume }}
+{{/each}}
+
+### 4.3 Data Retention
+| Data Type | Retention Period | Archive Policy | Deletion Policy |
+|-----------|------------------|----------------|-----------------|
+{{#each dataRetention}}
+| {{ type }} | {{ period }} | {{ archive }} | {{ deletion }} |
+{{/each}}
+
+---
+
+## 5. API Specification
+
+### 5.1 API Design Principles
+{{#each apiPrinciples}}
+- {{ this }}
+{{/each}}
+
+### 5.2 Endpoints
+{{#each endpoints}}
+#### {{ method }} {{ path }}
+- **Description:** {{ description }}
+- **Authentication:** {{ authentication }}
+- **Authorization:** {{ authorization }}
+- **Rate Limit:** {{ rateLimit }}
+
+**Request:**
+```json
+{{ requestSchema }}
+```
+
+**Response (Success):**
+```json
+{{ responseSchema }}
+```
+
+**Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+{{#each errors}}
+| {{ code }} | {{ message }} | {{ description }} |
+{{/each}}
+{{/each}}
+
+### 5.3 API Versioning
+- **Strategy:** {{ apiVersioning.strategy }}
+- **Current Version:** {{ apiVersioning.current }}
+- **Deprecation Policy:** {{ apiVersioning.deprecation }}
+
+---
+
+## 6. Security Architecture
+
+### 6.1 Authentication
+- **Method:** {{ security.authentication.method }}
+- **Token Type:** {{ security.authentication.tokenType }}
+- **Token Expiry:** {{ security.authentication.expiry }}
+- **Refresh Strategy:** {{ security.authentication.refresh }}
+
+### 6.2 Authorization
+- **Model:** {{ security.authorization.model }}
+- **Roles:**
+{{#each security.authorization.roles}}
+  - **{{ name }}:** {{ permissions }}
+{{/each}}
+
+### 6.3 Data Protection
+| Data Category | Encryption At Rest | Encryption In Transit | Access Controls |
+|---------------|--------------------|-----------------------|-----------------|
+{{#each security.dataProtection}}
+| {{ category }} | {{ atRest }} | {{ inTransit }} | {{ accessControls }} |
+{{/each}}
+
+### 6.4 Security Controls
+{{#each security.controls}}
+- **{{ name }}:** {{ implementation }}
+  - OWASP Reference: {{ owaspRef }}
+{{/each}}
+
+---
+
+## 7. Performance Specifications
+
+### 7.1 Performance Targets
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+{{#each performance.targets}}
+| {{ metric }} | {{ target }} | {{ measurement }} |
+{{/each}}
+
+### 7.2 Scalability
+- **Horizontal Scaling:** {{ performance.scaling.horizontal }}
+- **Vertical Scaling:** {{ performance.scaling.vertical }}
+- **Auto-scaling Rules:** {{ performance.scaling.autoScaling }}
+
+### 7.3 Caching Strategy
+{{#each performance.caching}}
+- **{{ layer }}:**
+  - Technology: {{ technology }}
+  - TTL: {{ ttl }}
+  - Invalidation: {{ invalidation }}
+{{/each}}
+
+---
+
+## 8. Reliability & Resilience
+
+### 8.1 Availability Target
+- **SLA:** {{ reliability.sla }}
+- **Uptime Target:** {{ reliability.uptime }}
+
+### 8.2 Failure Modes
+{{#each reliability.failureModes}}
+| Failure Mode | Detection | Recovery | RTO |
+|--------------|-----------|----------|-----|
+| {{ mode }} | {{ detection }} | {{ recovery }} | {{ rto }} |
+{{/each}}
+
+### 8.3 Circuit Breaker Configuration
+```yaml
+{{ reliability.circuitBreaker }}
+```
+
+### 8.4 Retry Policies
+{{#each reliability.retryPolicies}}
+- **{{ operation }}:**
+  - Max Retries: {{ maxRetries }}
+  - Backoff: {{ backoff }}
+  - Timeout: {{ timeout }}
+{{/each}}
+
+---
+
+## 9. Observability
+
+### 9.1 Logging
+- **Format:** {{ observability.logging.format }}
+- **Level:** {{ observability.logging.level }}
+- **Retention:** {{ observability.logging.retention }}
+- **Aggregation:** {{ observability.logging.aggregation }}
+
+### 9.2 Metrics
+{{#each observability.metrics}}
+| Metric Name | Type | Labels | Alert Threshold |
+|-------------|------|--------|-----------------|
+| {{ name }} | {{ type }} | {{ labels }} | {{ threshold }} |
+{{/each}}
+
+### 9.3 Tracing
+- **Provider:** {{ observability.tracing.provider }}
+- **Sample Rate:** {{ observability.tracing.sampleRate }}
+- **Propagation:** {{ observability.tracing.propagation }}
+
+### 9.4 Alerting
+{{#each observability.alerts}}
+| Alert | Condition | Severity | Notification |
+|-------|-----------|----------|--------------|
+| {{ name }} | {{ condition }} | {{ severity }} | {{ notification }} |
+{{/each}}
+
+---
+
+## 10. Deployment Architecture
+
+### 10.1 Environment Configuration
+| Environment | Purpose | Infrastructure | Access |
+|-------------|---------|----------------|--------|
+{{#each deployment.environments}}
+| {{ name }} | {{ purpose }} | {{ infrastructure }} | {{ access }} |
+{{/each}}
+
+### 10.2 CI/CD Pipeline
+```
+{{ deployment.pipeline }}
+```
+
+### 10.3 Deployment Strategy
+- **Strategy:** {{ deployment.strategy }}
+- **Rollback:** {{ deployment.rollback }}
+- **Health Checks:** {{ deployment.healthChecks }}
+
+---
+
+## 11. Testing Strategy
+
+### 11.1 Test Levels
+| Level | Coverage Target | Tools | Automation |
+|-------|-----------------|-------|------------|
+{{#each testing.levels}}
+| {{ level }} | {{ coverage }} | {{ tools }} | {{ automation }} |
+{{/each}}
+
+### 11.2 Test Data Strategy
+- **Generation:** {{ testing.dataStrategy.generation }}
+- **Seeding:** {{ testing.dataStrategy.seeding }}
+- **Cleanup:** {{ testing.dataStrategy.cleanup }}
+
+### 11.3 Performance Testing
+- **Tool:** {{ testing.performance.tool }}
+- **Scenarios:** {{ testing.performance.scenarios }}
+- **Baseline:** {{ testing.performance.baseline }}
+
+---
+
+## 12. Migration Plan
+
+### 12.1 Data Migration
+{{#each migration.data}}
+| Source | Destination | Transformation | Validation |
+|--------|-------------|----------------|------------|
+| {{ source }} | {{ destination }} | {{ transformation }} | {{ validation }} |
+{{/each}}
+
+### 12.2 Rollback Plan
+{{ migration.rollback }}
+
+### 12.3 Feature Flags
+{{#each migration.featureFlags}}
+| Flag | Purpose | Default | Cleanup Date |
+|------|---------|---------|--------------|
+| {{ name }} | {{ purpose }} | {{ default }} | {{ cleanup }} |
+{{/each}}
+
+---
+
+## 13. Dependencies
+
+### 13.1 Internal Dependencies
+{{#each dependencies.internal}}
+| Service | Version | Status | Owner |
+|---------|---------|--------|-------|
+| {{ name }} | {{ version }} | {{ status }} | {{ owner }} |
+{{/each}}
+
+### 13.2 External Dependencies
+{{#each dependencies.external}}
+| Service | Provider | SLA | Fallback |
+|---------|----------|-----|----------|
+| {{ name }} | {{ provider }} | {{ sla }} | {{ fallback }} |
+{{/each}}
+
+---
+
+## 14. Risks & Mitigations
+
+| Risk | Probability | Impact | Mitigation | Owner |
+|------|-------------|--------|------------|-------|
+{{#each risks}}
+| {{ description }} | {{ probability }} | {{ impact }} | {{ mitigation }} | {{ owner }} |
+{{/each}}
+
+---
+
+## 15. Open Questions
+
+{{#each openQuestions}}
+- [ ] **Q{{ @index }}:** {{ question }}
+  - Status: {{ status }}
+  - Owner: {{ owner }}
+{{/each}}
+
+---
+
+## 16. Approval
+
+| Role | Name | Date | Status |
+|------|------|------|--------|
+{{#each approvals}}
+| {{ role }} | {{ name }} | {{ date }} | {{ status }} |
+{{/each}}
+
+---
+
+*Generated by LaraForge - Version-Aware Development Orchestrator*

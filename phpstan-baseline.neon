@@ -1,0 +1,1267 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method LaraForge\\Adapters\\ClaudeCodeAdapter\:\:executeSkill\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Adapters/ClaudeCodeAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\ClaudeCodeAdapter\:\:executeSkill\(\) should return array\{success\: bool, output\: mixed, error\?\: string\} but returns array\{success\: bool, output\: mixed, artifacts\: array\<string, mixed\>, next_steps\: array\<array\{skill\: string, params\?\: array, reason\?\: string\}\>, error\: string\|null\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/ClaudeCodeAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\ClaudeCodeAdapter\:\:formatArrayOutput\(\) has parameter \$output with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Adapters/ClaudeCodeAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\ClaudeCodeAdapter\:\:formatOutput\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/ClaudeCodeAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\Contracts\\AgentAdapterInterface\:\:executeSkill\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Adapters/Contracts/AgentAdapterInterface.php
+
+		-
+			message: '#^Cannot call method artifacts\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Adapters/CursorAdapter.php
+
+		-
+			message: '#^Cannot call method nextSteps\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Adapters/CursorAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\CursorAdapter\:\:executeSkill\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Adapters/CursorAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\CursorAdapter\:\:executeSkill\(\) should return array\{success\: bool, output\: mixed, error\?\: string\} but returns array\{success\: bool, output\: mixed, artifacts\: array\<string, mixed\>, next_steps\: array\<array\{skill\: string, params\?\: array, reason\?\: string\}\>, error\: string\|null, cursor_actions\: array\<int, array\<string, mixed\>\>\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/CursorAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\CursorAdapter\:\:formatOutput\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/CursorAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\GenericAgentAdapter\:\:executeSkill\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Adapters/GenericAgentAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\GenericAgentAdapter\:\:executeSkill\(\) should return array\{success\: bool, output\: mixed, error\?\: string\} but returns array\{success\: bool, output\: mixed, artifacts\: array\<string, mixed\>, next_steps\: array\<array\{skill\: string, params\?\: array, reason\?\: string\}\>, error\: string\|null, metadata\: array\<string, mixed\>\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/GenericAgentAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\GenericAgentAdapter\:\:formatOutput\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/GenericAgentAdapter.php
+
+		-
+			message: '#^Method LaraForge\\Adapters\\IdeRegistry\:\:generateCursorFiles\(\) should return array\<string, string\> but returns array\<string, bool\|string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Adapters/IdeRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:executeSkill\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:failure\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:handoff\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:handoffTo\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:handoffTo\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:success\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Agent\:\:success\(\) has parameter \$nextTasks with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Agent.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentRegistry\:\:metadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:__construct\(\) has parameter \$handoff with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:__construct\(\) has parameter \$nextTasks with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:failure\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:failure\(\) has parameter \$skillResults with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:handoff\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:nextTasks\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:success\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:success\(\) has parameter \$nextTasks with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:success\(\) has parameter \$skillResults with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:withHandoff\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\AgentResult\:\:withHandoff\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/AgentResult.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Contracts\\AgentInterface\:\:handoff\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Contracts/AgentInterface.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Contracts\\AgentResultInterface\:\:handoff\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Contracts/AgentResultInterface.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Contracts\\AgentResultInterface\:\:nextTasks\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Contracts/AgentResultInterface.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:bugfix\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:create\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:feature\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:refactor\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:review\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:test\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Method LaraForge\\Agents\\Task\:\:withSubtask\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Agents/Task.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method LaraForge\\Criteria\\AcceptanceCriteria\:\:fromArray\(\) expects array\{feature\: string, criteria\: array\<array\{id\: string, description\: string, assertions\?\: array\<string\>\}\>\}, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Criteria/CriteriaLoader.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:addArchitecturalDecision\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:addComponent\(\) has parameter \$dependencies with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:addComponent\(\) has parameter \$interfaces with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:addFileToStructure\(\) has parameter \$creates with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:addFileToStructure\(\) has parameter \$modifies with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:architecturalDecisions\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:components\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 2
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\DesignDocument\:\:fileStructure\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 2
+			path: src/Documents/DesignDocument.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\Document@anonymous/Documents/DocumentRegistry\.php\:245\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/DocumentRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:addRequirement\(\) has parameter \$acceptanceCriteria with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:addTestContract\(\) has parameter \$expectations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:addTestContract\(\) has parameter \$invariants with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:addTestContract\(\) has parameter \$preconditions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:requirements\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\FeatureRequirements\:\:testContracts\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 3
+			path: src/Documents/FeatureRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\ProductRequirements\:\:successCriteria\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/ProductRequirements.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:addContract\(\) has parameter \$action with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:addContract\(\) has parameter \$expectations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:addContract\(\) has parameter \$invariants with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:addContract\(\) has parameter \$preconditions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:addGwtContract\(\) has parameter \$invariants with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Documents\\TestContract\:\:contracts\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 4
+			path: src/Documents/TestContract.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateAssertionTest\(\) has parameter \$assertion with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateInteractionTest\(\) has parameter \$interaction with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generatePageObject\(\) has parameter \$interactions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateTestCases\(\) has parameter \$assertions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateTestCases\(\) has parameter \$interactions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateTestContent\(\) has parameter \$assertions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\BrowserTestGenerator\:\:generateTestContent\(\) has parameter \$interactions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/BrowserTestGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Generators\\GitHooksGenerator\:\:generateHookContent\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Generators/GitHooksGenerator.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Contracts\\HookInterface\:\:execute\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Contracts/HookInterface.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Contracts\\HookInterface\:\:execute\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Contracts/HookInterface.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Contracts\\HookInterface\:\:shouldRun\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Contracts/HookInterface.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Hook\:\:continue\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Hook.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Hook\:\:execute\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Hook.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Hook\:\:execute\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Hook.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\Hook\:\:shouldRun\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/Hook.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:execute\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:execute\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePostStep\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePostStep\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePostWorkflow\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePostWorkflow\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePreStep\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePreStep\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePreWorkflow\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executePreWorkflow\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executeValidation\(\) has parameter \$eventData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Hooks\\HookRegistry\:\:executeValidation\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Hooks/HookRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Mcp\\DocumentationProvider\:\:formatUrlList\(\) has parameter \$urls with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Mcp/DocumentationProvider.php
+
+		-
+			message: '#^Method LaraForge\\Mcp\\DocumentationProvider\:\:getUrlsForTask\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Mcp/DocumentationProvider.php
+
+		-
+			message: '#^Method LaraForge\\Project\\InteractiveSetup\:\:shouldAskQuestion\(\) has parameter \$question with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/InteractiveSetup.php
+
+		-
+			message: '#^Method LaraForge\\Project\\ProgressTracker\:\:projectProgress\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/ProgressTracker.php
+
+		-
+			message: '#^Method LaraForge\\Project\\ProgressTracker\:\:statusBoard\(\) should return array\<string, array\<LaraForge\\Project\\Contracts\\FeatureInterface\>\> but returns array\<string, list\<array\<string, int\|string\>\|LaraForge\\Project\\Contracts\\FeatureInterface\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Project/ProgressTracker.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectApiStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectCacheStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectDatabaseStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectFramework\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectFrontendStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectLaravelVersion\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectPackages\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectPhpVersion\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectQueueStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:detectTestingStack\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:getComposerJson\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:getComposerLock\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Project\\TechnologyStack\:\:getPackageJson\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Parameter \#2 \$subject of function preg_match expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Property LaraForge\\Project\\TechnologyStack\:\:\$composerJson type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Property LaraForge\\Project\\TechnologyStack\:\:\$composerLock type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Property LaraForge\\Project\\TechnologyStack\:\:\$packageJson type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Project/TechnologyStack.php
+
+		-
+			message: '#^Method LaraForge\\Session\\SessionManager\:\:listWorktrees\(\) should return array\<array\{path\: string, branch\: string, head\: string\}\> but returns list\<array\{branch\?\: string, head\?\: string, path\?\: string\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Session/SessionManager.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Contracts\\SkillInterface\:\:execute\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Contracts/SkillInterface.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Contracts\\SkillInterface\:\:validate\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Contracts/SkillInterface.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Contracts\\SkillResultInterface\:\:nextSteps\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Contracts/SkillResultInterface.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\DocumentSkills\\CreateFrdSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/DocumentSkills/CreateFrdSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\DocumentSkills\\CreatePrdSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/DocumentSkills/CreatePrdSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\DocumentSkills\\CreatePseudocodeSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/DocumentSkills/CreatePseudocodeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\DocumentSkills\\CreateTestContractSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/DocumentSkills/CreateTestContractSkill.php
+
+		-
+			message: '#^Parameter \#1 \$laraforge of class LaraForge\\Generators\\ApiResourceGenerator constructor expects LaraForge\\Contracts\\LaraForgeInterface, LaraForge\\Contracts\\LaraForgeInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Skills/GeneratorSkills/ApiResourceSkill.php
+
+		-
+			message: '#^Parameter \#1 \$laraforge of class LaraForge\\Generators\\FeatureTestGenerator constructor expects LaraForge\\Contracts\\LaraForgeInterface, LaraForge\\Contracts\\LaraForgeInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Skills/GeneratorSkills/FeatureTestSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GeneratorSkills\\GeneratorSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GeneratorSkills/GeneratorSkill.php
+
+		-
+			message: '#^Parameter \#1 \$laraforge of class LaraForge\\Generators\\ManagerGenerator constructor expects LaraForge\\Contracts\\LaraForgeInterface, LaraForge\\Contracts\\LaraForgeInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Skills/GeneratorSkills/ManagerSkill.php
+
+		-
+			message: '#^Parameter \#1 \$laraforge of class LaraForge\\Generators\\PolicyGenerator constructor expects LaraForge\\Contracts\\LaraForgeInterface, LaraForge\\Contracts\\LaraForgeInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Skills/GeneratorSkills/PolicySkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\BranchSkill\:\:checkout\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/BranchSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\BranchSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/BranchSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\BranchSkill\:\:runGit\(\) has parameter \$args with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/BranchSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\BranchSkill\:\:runGit\(\) should return array\{code\: int, stdout\: string, stderr\: string\} but returns array\{code\: int\|null, stdout\: string, stderr\: string\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Skills/GitSkills/BranchSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\CommitSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/CommitSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\CommitSkill\:\:runGit\(\) has parameter \$args with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/CommitSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\CommitSkill\:\:runGit\(\) should return array\{code\: int, stdout\: string, stderr\: string\} but returns array\{code\: int\|null, stdout\: string, stderr\: string\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Skills/GitSkills/CommitSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:normalMerge\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:rebaseMerge\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:runGit\(\) has parameter \$args with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:runGit\(\) should return array\{code\: int, stdout\: string, stderr\: string\} but returns array\{code\: int\|null, stdout\: string, stderr\: string\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\MergeSkill\:\:squashMerge\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/MergeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\GitSkills\\WorktreeSkill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/GitSkills/WorktreeSkill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Skill\:\:execute\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Skill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Skill\:\:getParam\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Skill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Skill\:\:perform\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Skill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Skill\:\:resolveParams\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Skill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\Skill\:\:validate\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/Skill.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillRegistry\:\:metadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillRegistry.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:__construct\(\) has parameter \$nextSteps with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:failure\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:nextSteps\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:success\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\SkillResult\:\:success\(\) has parameter \$nextSteps with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/SkillResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\ValidationResult\:\:allWarnings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/ValidationResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\ValidationResult\:\:invalid\(\) has parameter \$errors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/ValidationResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\ValidationResult\:\:invalid\(\) has parameter \$warnings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/ValidationResult.php
+
+		-
+			message: '#^Method LaraForge\\Skills\\ValidationResult\:\:withWarnings\(\) has parameter \$warnings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Skills/ValidationResult.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strtolower expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Support/Generator.php
+
+		-
+			message: '#^Method LaraForge\\Templates\\TemplateEngine\:\:processConditionals\(\) has parameter \$variables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Method LaraForge\\Templates\\TemplateEngine\:\:processConditionals\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Method LaraForge\\Templates\\TemplateEngine\:\:processLoops\(\) has parameter \$variables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Method LaraForge\\Templates\\TemplateEngine\:\:processLoops\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Parameter \#1 \$content of method LaraForge\\Templates\\TemplateEngine\:\:processConditionals\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function preg_replace_callback expects array\<float\|int\|string\>\|string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Templates/TemplateEngine.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:failure\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:failure\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:needsReview\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:needsReview\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:needsReview\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:success\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\Step\:\:success\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/Step.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:failure\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:failure\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:forReview\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:forReview\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:forReview\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:success\(\) has parameter \$artifacts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\StepResult\:\:success\(\) has parameter \$outputs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/StepResult.php
+
+		-
+			message: '#^Method LaraForge\\Workflows\\WorkflowOrchestrator\:\:allStatuses\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Workflows/WorkflowOrchestrator.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:content\(\) has parameter \$branches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:content\(\) has parameter \$sections with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:content\(\) has parameter \$sessionIds with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:delete\(\) has parameter \$branches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:delete\(\) has parameter \$sessionIds with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:rename\(\) has parameter \$branches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\Conflict\:\:rename\(\) has parameter \$sessionIds with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/Conflict.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:conflict\(\) has parameter \$conflicts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:conflict\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:conflict\(\) has parameter \$sourceBranches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:failure\(\) has parameter \$conflicts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:failure\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:failure\(\) has parameter \$sourceBranches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:success\(\) has parameter \$mergedFiles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:success\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\MergeResult\:\:success\(\) has parameter \$sourceBranches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/MergeResult.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\WorktreeManager\:\:getChangedFiles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/WorktreeManager.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\WorktreeManager\:\:getModifiedFilesInBranch\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/WorktreeManager.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\WorktreeManager\:\:listWorktrees\(\) should return array\<array\{path\: string, branch\: string, head\: string\}\> but returns list\<array\{branch\?\: string, head\?\: string, path\?\: string\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Worktree/WorktreeManager.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\WorktreeManager\:\:runGit\(\) has parameter \$args with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Worktree/WorktreeManager.php
+
+		-
+			message: '#^Method LaraForge\\Worktree\\WorktreeManager\:\:runGit\(\) should return array\{code\: int, stdout\: string, stderr\: string\} but returns array\{code\: int\|null, stdout\: string, stderr\: string\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Worktree/WorktreeManager.php

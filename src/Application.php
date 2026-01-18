@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace LaraForge;
 
+use LaraForge\Commands\AgentAddCommand;
+use LaraForge\Commands\AgentListCommand;
+use LaraForge\Commands\AgentRemoveCommand;
+use LaraForge\Commands\AgentSyncCommand;
 use LaraForge\Commands\CriteriaInitCommand;
 use LaraForge\Commands\CriteriaValidateCommand;
 use LaraForge\Commands\GenerateCommand;
@@ -12,6 +16,7 @@ use LaraForge\Commands\InitCommand;
 use LaraForge\Commands\ListGeneratorsCommand;
 use LaraForge\Commands\NextCommand;
 use LaraForge\Commands\PrdImportCommand;
+use LaraForge\Commands\ReconfigureCommand;
 use LaraForge\Commands\VersionCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,6 +51,13 @@ final class Application extends ConsoleApplication
         $this->add(new CriteriaValidateCommand($this->laraforge));
         $this->add(new PrdImportCommand($this->laraforge));
         $this->add(new NextCommand($this->laraforge));
+        $this->add(new ReconfigureCommand($this->laraforge));
+
+        // Agent management commands
+        $this->add(new AgentListCommand($this->laraforge));
+        $this->add(new AgentAddCommand($this->laraforge));
+        $this->add(new AgentRemoveCommand($this->laraforge));
+        $this->add(new AgentSyncCommand($this->laraforge));
 
         // Register adapter commands
         foreach ($this->laraforge->adapters() as $adapter) {

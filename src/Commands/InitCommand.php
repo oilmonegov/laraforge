@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraForge\Commands;
 
+use LaraForge\AgentSupport\AgentSupportFactory;
 use LaraForge\Commands\Concerns\SuggestsNextStep;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\note;
 use function Laravel\Prompts\outro;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\spin;
@@ -32,7 +34,8 @@ final class InitCommand extends Command
     {
         $this
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overwrite existing configuration')
-            ->addOption('no-interaction', 'n', InputOption::VALUE_NONE, 'Use default values without prompting');
+            ->addOption('no-interaction', 'n', InputOption::VALUE_NONE, 'Use default values without prompting')
+            ->addOption('agents', null, InputOption::VALUE_OPTIONAL, 'Comma-separated list of agents to install (claude-code,cursor,jetbrains,windsurf)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -79,17 +82,25 @@ final class InitCommand extends Command
             default: $detectedFramework,
         );
 
-        // Select AI tools to configure
-        $aiTools = multiselect(
-            label: 'Which AI tools do you use?',
-            options: [
-                'claude' => 'Claude Code',
-                'cursor' => 'Cursor',
-                'vscode' => 'VS Code (with Copilot)',
-            ],
-            default: ['claude'],
-            required: true,
-        );
+        // Get agent registry
+        $registry = AgentSupportFactory::create();
+
+        // Select AI agents to configure
+        $agentsOption = $input->getOption('agents');
+        if ($agentsOption !== null && $agentsOption !== false) {
+            // Use command-line option
+            $selectedAgents = array_filter(array_map('trim', explode(',', $agentsOption)));
+        } else {
+            // Interactive selection using registry
+            $agentOptions = $registry->getPromptOptions();
+            $selectedAgents = multiselect(
+                label: 'Which AI coding assistants do you use?',
+                options: $agentOptions,
+                default: [AgentSupportFactory::primaryAgent()],
+                required: true,
+                hint: 'Select all that apply. You can add more later with `laraforge agent:add`',
+            );
+        }
 
         // Select features
         $features = multiselect(
@@ -97,56 +108,77 @@ final class InitCommand extends Command
             options: [
                 'skills' => 'Skills (knowledge base for AI)',
                 'commands' => 'Slash commands',
-                'agents' => 'Sub-agents',
+                'sub_agents' => 'Sub-agents',
                 'quality' => 'Quality tools (PHPStan, Pint, Pest)',
                 'ci' => 'CI/CD templates (GitHub Actions)',
+                'docs' => 'Documentation templates (PRD, FRD, Tech Spec)',
             ],
-            default: ['skills', 'commands', 'quality'],
+            default: ['skills', 'commands', 'quality', 'docs'],
         );
 
         // Create directory structure
         spin(
             message: 'Creating LaraForge configuration...',
-            callback: function () use ($filesystem, $laraforgeDir, $projectName, $projectDescription, $framework, $aiTools, $features): void {
-                // Create .laraforge directory
+            callback: function () use ($filesystem, $laraforgeDir, $projectName, $projectDescription, $framework, $selectedAgents, $features): void {
+                // Create .laraforge directory structure
                 $filesystem->mkdir($laraforgeDir);
                 $filesystem->mkdir($laraforgeDir.'/templates');
                 $filesystem->mkdir($laraforgeDir.'/stubs');
                 $filesystem->mkdir($laraforgeDir.'/plugins');
+                $filesystem->mkdir($laraforgeDir.'/docs');
+                $filesystem->mkdir($laraforgeDir.'/criteria');
+                $filesystem->mkdir($laraforgeDir.'/agents');
 
                 // Create config.yaml
-                $config = $this->generateConfig($projectName, $projectDescription, $framework, $aiTools, $features);
+                $config = $this->generateConfig($projectName, $projectDescription, $framework, $selectedAgents, $features);
                 $filesystem->dumpFile($laraforgeDir.'/config.yaml', $config);
 
                 // Create .gitkeep files
                 $filesystem->touch($laraforgeDir.'/templates/.gitkeep');
                 $filesystem->touch($laraforgeDir.'/stubs/.gitkeep');
                 $filesystem->touch($laraforgeDir.'/plugins/.gitkeep');
+                $filesystem->touch($laraforgeDir.'/docs/.gitkeep');
+                $filesystem->touch($laraforgeDir.'/criteria/.gitkeep');
             },
         );
 
-        // Generate initial files based on selections
-        spin(
-            message: 'Generating AI configuration files...',
-            callback: function () use ($filesystem, $workingDir, $aiTools, $features, $projectName, $projectDescription): void {
-                // Generate CLAUDE.md if Claude is selected
-                if (in_array('claude', $aiTools, true)) {
-                    $this->generateClaudeMd($filesystem, $workingDir, $projectName, $projectDescription, $features);
-                }
+        // Install selected AI agents using the new agent support system
+        $installedAgents = [];
+        foreach ($selectedAgents as $agentId) {
+            $support = $registry->get($agentId);
+            if ($support !== null) {
+                $result = spin(
+                    message: "Installing {$support->name()} support...",
+                    callback: fn () => $support->install($workingDir),
+                );
 
-                // Generate .cursorrules if Cursor is selected
-                if (in_array('cursor', $aiTools, true)) {
-                    $this->generateCursorRules($filesystem, $workingDir, $projectName);
+                if ($result['success']) {
+                    $installedAgents[] = $support->name();
+                    foreach ($result['messages'] ?? [] as $message) {
+                        $output->writeln("  - {$message}");
+                    }
                 }
+            }
+        }
 
-                // Generate VS Code settings if VS Code is selected
-                if (in_array('vscode', $aiTools, true)) {
-                    $this->generateVsCodeSettings($filesystem, $workingDir);
-                }
-            },
-        );
+        // Generate VS Code settings if requested (not covered by agent support)
+        if (in_array('quality', $features, true)) {
+            spin(
+                message: 'Configuring VS Code settings...',
+                callback: fn () => $this->generateVsCodeSettings($filesystem, $workingDir),
+            );
+        }
 
         outro('✅ LaraForge initialized successfully!');
+
+        // Show summary
+        if (! empty($installedAgents)) {
+            note('Installed AI agent support: '.implode(', ', $installedAgents));
+        }
+
+        note('Configuration stored in: .laraforge/config.yaml');
+        note('Use `laraforge agent:list` to see all available agents');
+        note('Use `laraforge agent:sync` to update agent configs when docs change');
 
         // Mark 'init' step complete and suggest what's next
         $this->completeStepAndSuggestNext('init', $output);
@@ -168,9 +200,12 @@ final class InitCommand extends Command
 
         // Check for Slim
         if (file_exists($path.'/composer.json')) {
-            $composer = json_decode(file_get_contents($path.'/composer.json'), true);
-            if (isset($composer['require']['slim/slim'])) {
-                return 'slim';
+            $content = file_get_contents($path.'/composer.json');
+            if ($content !== false) {
+                $composer = json_decode($content, true);
+                if (isset($composer['require']['slim/slim'])) {
+                    return 'slim';
+                }
             }
         }
 
@@ -178,14 +213,14 @@ final class InitCommand extends Command
     }
 
     /**
-     * @param  array<string>  $aiTools
+     * @param  array<string>  $agents
      * @param  array<string>  $features
      */
     private function generateConfig(
         string $projectName,
         string $projectDescription,
         string $framework,
-        array $aiTools,
+        array $agents,
         array $features,
     ): string {
         $config = [
@@ -194,43 +229,12 @@ final class InitCommand extends Command
                 'description' => $projectDescription,
             ],
             'framework' => $framework,
-            'ai_tools' => $aiTools,
+            'agents' => $agents,
             'features' => array_fill_keys($features, true),
         ];
 
-        return "# LaraForge Configuration\n# Documentation: https://github.com/oilmonegov/laraforge\n\n".
+        return "# LaraForge Configuration\n# Documentation: https://github.com/laraforge/laraforge\n\n".
             \Symfony\Component\Yaml\Yaml::dump($config, 4, 2);
-    }
-
-    /**
-     * @param  array<string>  $features
-     */
-    private function generateClaudeMd(
-        Filesystem $filesystem,
-        string $workingDir,
-        string $projectName,
-        string $projectDescription,
-        array $features,
-    ): void {
-        $content = $this->laraforge->templates()->renderFile('CLAUDE.md.template', [
-            'projectName' => $projectName,
-            'projectDescription' => $projectDescription,
-            'hasSkills' => in_array('skills', $features, true),
-            'hasCommands' => in_array('commands', $features, true),
-            'hasAgents' => in_array('agents', $features, true),
-        ]);
-
-        $filesystem->dumpFile($workingDir.'/CLAUDE.md', $content);
-    }
-
-    private function generateCursorRules(Filesystem $filesystem, string $workingDir, string $projectName): void
-    {
-        if ($this->laraforge->templates()->exists('cursor/rules.template')) {
-            $content = $this->laraforge->templates()->renderFile('cursor/rules.template', [
-                'projectName' => $projectName,
-            ]);
-            $filesystem->dumpFile($workingDir.'/.cursorrules', $content);
-        }
     }
 
     private function generateVsCodeSettings(Filesystem $filesystem, string $workingDir): void
@@ -238,14 +242,39 @@ final class InitCommand extends Command
         $vscodeDir = $workingDir.'/.vscode';
         $filesystem->mkdir($vscodeDir);
 
-        if ($this->laraforge->templates()->exists('vscode/settings.json')) {
-            $content = $this->laraforge->templates()->renderFile('vscode/settings.json', []);
-            $filesystem->dumpFile($vscodeDir.'/settings.json', $content);
-        }
+        // Generate recommended settings for PHP/Laravel development
+        $settings = [
+            'php.validate.executablePath' => '/usr/local/bin/php',
+            'editor.formatOnSave' => true,
+            'editor.defaultFormatter' => 'bmewburn.vscode-intelephense-client',
+            '[php]' => [
+                'editor.defaultFormatter' => 'open-southeners.laravel-pint',
+            ],
+            'phpstan.enabled' => true,
+            'phpstan.configFile' => 'phpstan.neon.dist',
+            'pest.path' => './vendor/bin/pest',
+        ];
 
-        if ($this->laraforge->templates()->exists('vscode/extensions.json')) {
-            $content = $this->laraforge->templates()->renderFile('vscode/extensions.json', []);
-            $filesystem->dumpFile($vscodeDir.'/extensions.json', $content);
-        }
+        $filesystem->dumpFile(
+            $vscodeDir.'/settings.json',
+            json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        // Generate recommended extensions
+        $extensions = [
+            'recommendations' => [
+                'bmewburn.vscode-intelephense-client',
+                'open-southeners.laravel-pint',
+                'swordev.phpstan',
+                'open-southeners.vscode-pest',
+                'bradlc.vscode-tailwindcss',
+                'vue.volar',
+            ],
+        ];
+
+        $filesystem->dumpFile(
+            $vscodeDir.'/extensions.json',
+            json_encode($extensions, JSON_PRETTY_PRINT)
+        );
     }
 }

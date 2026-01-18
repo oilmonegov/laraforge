@@ -1,0 +1,287 @@
+# Lessons Learned Document
+
+**Project:** {{ projectName }}
+**Feature/Sprint:** {{ featureName }}
+**Period:** {{ startDate }} - {{ endDate }}
+**Author:** {{ author }}
+**Date:** {{ date }}
+
+---
+
+## Executive Summary
+
+{{ summary }}
+
+---
+
+## Project Overview
+
+### Goals
+{{#each goals}}
+- {{ this }}
+{{/each}}
+
+### Actual Outcomes
+{{#each outcomes}}
+- **{{ goal }}:** {{ result }} ({{ status }})
+{{/each}}
+
+### Team
+{{#each team}}
+- {{ name }} ({{ role }})
+{{/each}}
+
+---
+
+## What Went Well
+
+### Technical Successes
+{{#each successes.technical}}
+#### {{ title }}
+- **Description:** {{ description }}
+- **Impact:** {{ impact }}
+- **Key Factors:** {{ factors }}
+- **Recommendation:** {{ recommendation }}
+{{/each}}
+
+### Process Successes
+{{#each successes.process}}
+#### {{ title }}
+- **Description:** {{ description }}
+- **Impact:** {{ impact }}
+- **Key Factors:** {{ factors }}
+- **Recommendation:** {{ recommendation }}
+{{/each}}
+
+### Team Collaboration
+{{#each successes.collaboration}}
+#### {{ title }}
+- **Description:** {{ description }}
+- **Impact:** {{ impact }}
+- **Key Factors:** {{ factors }}
+- **Recommendation:** {{ recommendation }}
+{{/each}}
+
+---
+
+## What Could Be Improved
+
+### Technical Challenges
+{{#each improvements.technical}}
+#### {{ title }}
+- **Issue:** {{ issue }}
+- **Root Cause:** {{ rootCause }}
+- **Impact:** {{ impact }}
+- **Resolution:** {{ resolution }}
+- **Prevention Strategy:** {{ prevention }}
+{{/each}}
+
+### Process Challenges
+{{#each improvements.process}}
+#### {{ title }}
+- **Issue:** {{ issue }}
+- **Root Cause:** {{ rootCause }}
+- **Impact:** {{ impact }}
+- **Resolution:** {{ resolution }}
+- **Prevention Strategy:** {{ prevention }}
+{{/each}}
+
+### Communication Issues
+{{#each improvements.communication}}
+#### {{ title }}
+- **Issue:** {{ issue }}
+- **Root Cause:** {{ rootCause }}
+- **Impact:** {{ impact }}
+- **Resolution:** {{ resolution }}
+- **Prevention Strategy:** {{ prevention }}
+{{/each}}
+
+---
+
+## AI Agent Observations
+
+### Effective AI Practices
+{{#each aiObservations.effective}}
+- **Pattern:** {{ pattern }}
+  - Context: {{ context }}
+  - Benefit: {{ benefit }}
+  - Reuse: {{ reuse }}
+{{/each}}
+
+### AI Limitations Encountered
+{{#each aiObservations.limitations}}
+- **Limitation:** {{ limitation }}
+  - Context: {{ context }}
+  - Workaround: {{ workaround }}
+  - Human Intervention Required: {{ humanIntervention }}
+{{/each}}
+
+### Prompt Engineering Insights
+{{#each aiObservations.prompts}}
+- **Scenario:** {{ scenario }}
+  - Effective Approach: {{ approach }}
+  - Anti-Pattern: {{ antiPattern }}
+{{/each}}
+
+---
+
+## Code Quality Metrics
+
+### Testing
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+{{#each metrics.testing}}
+| {{ metric }} | {{ target }} | {{ actual }} | {{ status }} |
+{{/each}}
+
+### Static Analysis
+| Tool | Issues Found | Issues Fixed | Outstanding |
+|------|--------------|--------------|-------------|
+{{#each metrics.staticAnalysis}}
+| {{ tool }} | {{ found }} | {{ fixed }} | {{ outstanding }} |
+{{/each}}
+
+### Technical Debt
+{{#each metrics.technicalDebt}}
+- **{{ area }}:** {{ description }}
+  - Priority: {{ priority }}
+  - Effort to Fix: {{ effort }}
+{{/each}}
+
+---
+
+## Architecture Decisions Review
+
+### Decisions That Worked Well
+{{#each architectureReview.successful}}
+- **Decision:** {{ decision }}
+  - ADR Reference: {{ adrRef }}
+  - Validation: {{ validation }}
+{{/each}}
+
+### Decisions to Reconsider
+{{#each architectureReview.reconsider}}
+- **Decision:** {{ decision }}
+  - ADR Reference: {{ adrRef }}
+  - Issue: {{ issue }}
+  - Proposed Change: {{ proposedChange }}
+{{/each}}
+
+---
+
+## Best Practices Identified
+
+### Coding Standards
+{{#each bestPractices.coding}}
+- **Practice:** {{ practice }}
+  - Why: {{ rationale }}
+  - Example: `{{ example }}`
+{{/each}}
+
+### Testing Strategies
+{{#each bestPractices.testing}}
+- **Strategy:** {{ strategy }}
+  - Application: {{ application }}
+  - Benefits: {{ benefits }}
+{{/each}}
+
+### Documentation
+{{#each bestPractices.documentation}}
+- **Practice:** {{ practice }}
+  - Importance: {{ importance }}
+  - Template: {{ template }}
+{{/each}}
+
+---
+
+## Action Items
+
+### Immediate (Next Sprint)
+{{#each actionItems.immediate}}
+- [ ] **{{ title }}**
+  - Owner: {{ owner }}
+  - Priority: {{ priority }}
+  - Effort: {{ effort }}
+{{/each}}
+
+### Short-term (Next Month)
+{{#each actionItems.shortTerm}}
+- [ ] **{{ title }}**
+  - Owner: {{ owner }}
+  - Priority: {{ priority }}
+  - Effort: {{ effort }}
+{{/each}}
+
+### Long-term (Backlog)
+{{#each actionItems.longTerm}}
+- [ ] **{{ title }}**
+  - Owner: {{ owner }}
+  - Priority: {{ priority }}
+  - Effort: {{ effort }}
+{{/each}}
+
+---
+
+## Knowledge Transfer
+
+### Documentation Created
+{{#each knowledgeTransfer.documentation}}
+- {{ title }}: {{ location }}
+{{/each}}
+
+### Training Conducted
+{{#each knowledgeTransfer.training}}
+- {{ topic }}: {{ audience }} ({{ date }})
+{{/each}}
+
+### Runbooks Updated
+{{#each knowledgeTransfer.runbooks}}
+- {{ name }}: {{ changes }}
+{{/each}}
+
+---
+
+## Recommendations for Future Projects
+
+### Technical Recommendations
+{{#each recommendations.technical}}
+1. **{{ title }}**
+   - Context: {{ context }}
+   - Recommendation: {{ recommendation }}
+   - Expected Benefit: {{ benefit }}
+{{/each}}
+
+### Process Recommendations
+{{#each recommendations.process}}
+1. **{{ title }}**
+   - Context: {{ context }}
+   - Recommendation: {{ recommendation }}
+   - Expected Benefit: {{ benefit }}
+{{/each}}
+
+### Tool Recommendations
+{{#each recommendations.tools}}
+1. **{{ tool }}**
+   - Purpose: {{ purpose }}
+   - Replaces/Complements: {{ replaces }}
+   - Evaluation Notes: {{ notes }}
+{{/each}}
+
+---
+
+## Appendix
+
+### Timeline of Key Events
+{{#each timeline}}
+| {{ date }} | {{ event }} | {{ impact }} |
+{{/each}}
+
+### References
+{{#each references}}
+- {{ this }}
+{{/each}}
+
+---
+
+*Generated by LaraForge - Lessons Learned Template*
+*This document should be reviewed and updated throughout the project lifecycle.*
